@@ -38,21 +38,23 @@ public class Fonda {
      * Retorna el pedido creado, o null si no se pudo registrar.
      */
     public Pedido registrarPedido(int mesa, String codigoSancocho, int cantidad) {
-        Sancocho sancocho = buscarSancocho(codigoSancocho);
-        if (sancocho == null) {
-            System.out.println("Mesa " + mesa + ": el sancocho " + codigoSancocho + " no está en el menú.");
-            return null;
-        }
-        Pedido pedido = new Pedido(mesa, sancocho, cantidad);
-        pedidos.add(pedido);
-        if (!sancocho.servir(cantidad)) {
-            System.out.println("Mesa " + mesa + ": no alcanzan las porciones de " + sancocho.getNombre()
-                    + " (quedan " + sancocho.getPorcionesDisponibles() + ").");
-            return null;
-        }
-        return pedido;
+    Sancocho sancocho = buscarSancocho(codigoSancocho);
+    if (sancocho == null) {
+        System.out.println("Mesa " + mesa + ": el sancocho " + codigoSancocho + " no está en el menú.");
+        return null;
     }
-
+    
+    // LÓGICA: Primero validamos y servimos las porciones. Si falla, no creamos ni guardamos el pedido.
+    if (!sancocho.servir(cantidad)) {
+        System.out.println("Mesa " + mesa + ": no alcanzan las porciones de " + sancocho.getNombre()
+                + " (quedan " + sancocho.getPorcionesDisponibles() + ").");
+        return null;
+    }
+    
+    Pedido pedido = new Pedido(mesa, sancocho, cantidad);
+    pedidos.add(pedido);
+    return pedido;
+}
     /** Suma lo que pagan TODOS los pedidos registrados. */
     public double calcularVentasDelDia() {
         double total = 0;
