@@ -15,8 +15,10 @@
   location: variable a of type Acompanamiento | sumaAcompanamientos += a.getPrecio(); |
 | 6 | Verdura.java | 3 | '{' expected | public class Verdura extends Ingrediente { |
 | 7 | Verdura.java | 10 | minutosDeCoccion() in Verdura does not override or implement a method from a supertype | public int minutosCoccion() { |
-| 7 |  |  |  |  |
-| 9 |      |    |                     |         |
+| 8 | Condimento.java | 9 | cannot find symbol
+  symbol:   variable alFinal
+  location: class Condimento | this.seAgregaAlFinal = seAgregaAlFinal; |
+| 9 | Condimento.java | 17 | variable minutos might not have been initialized | int minutos = 0; |
 | 10 |      |    |                     |         |
 | 11 |      |    |                     |         |
 | 12 |      |    |                     |         |
