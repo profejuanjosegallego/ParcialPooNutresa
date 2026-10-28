@@ -11,15 +11,23 @@ public class Olla {
         this.ingredientes = new ArrayList<>();
     }
 
-    public int getCapacidadGramos() { return capacidadGramos; }
-    public int getCantidadIngredientes() { return ingredientes.size(); }
+    public int getCapacidadGramos() {
+        return capacidadGramos;
+    }
+
+    public int getCantidadIngredientes() {
+        return ingredientes.size();
+    }
 
     /** Retorna una copia para que nadie modifique la lista interna desde afuera. */
     public ArrayList<Ingrediente> getIngredientes() {
         return new ArrayList<>(ingredientes);
     }
 
-    /** Agrega el ingrediente solo si está fresco, su código no está repetido y CABE en la olla. */
+    /**
+     * Agrega el ingrediente solo si está fresco, su código no está repetido y CABE
+     * en la olla.
+     */
     public boolean agregarIngrediente(Ingrediente nuevo) {
         if (nuevo == null) {
             return false;
@@ -68,7 +76,10 @@ public class Olla {
         return total;
     }
 
-    /** La olla está lista cuando termina el ingrediente MÁS demorado (el mayor tiempo). */
+    /**
+     * La olla está lista cuando termina el ingrediente MÁS demorado (el mayor
+     * tiempo).
+     */
     public int calcularTiempoCoccion() {
         int mayor = 0;
         for (Ingrediente i : ingredientes) {

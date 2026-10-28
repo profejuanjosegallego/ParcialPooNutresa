@@ -19,11 +19,25 @@ public abstract class Ingrediente implements Identificable, Costeable {
     }
 
     @Override
-    public String getCodigo() { return codigo; }
-    public String getNombre() { return nombre; }
-    public int getGramos() { return gramos; }
-    public double getPrecioKilo() { return precioKilo; }
-    public boolean isFresco() { return fresco; }
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getGramos() {
+        return gramos;
+    }
+
+    public double getPrecioKilo() {
+        return precioKilo;
+    }
+
+    public boolean isFresco() {
+        return fresco;
+    }
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -50,7 +64,10 @@ public abstract class Ingrediente implements Identificable, Costeable {
         this.fresco = fresco;
     }
 
-    /** Costo en pesos: los gramos se pasan a kilos y se multiplican por el precio del kilo. */
+    /**
+     * Costo en pesos: los gramos se pasan a kilos y se multiplican por el precio
+     * del kilo.
+     */
     @Override
     public double calcularCosto() {
         return gramos / 1000.0 * precioKilo;
