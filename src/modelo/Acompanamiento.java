@@ -10,10 +10,22 @@ public class Acompanamiento implements Costeable {
         this.precio = precio;
     }
 
-    public String getNombre() { return nombre; }
-    public double getPrecio() { return precio }
+    public String getNombre() {
+         return nombre;
+         }
+    public double getPrecio() { 
+        return precio; 
 
-    public double calcularPrecio() {
+    }
+    @Override 
+    public double calcularCosto () {
         return precio;
     }
+    public double getNombre(){
+        return nombre;
+    }
+    public double getPrecio(){
+        return precio;
+    }
+    
 }

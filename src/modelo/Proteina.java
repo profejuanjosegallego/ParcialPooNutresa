@@ -9,6 +9,7 @@ public class Proteina extends Ingrediente {
         this.tipo = tipo;
     }
 
+
     public String getTipo() { return tipo; }
 
     /** La gallina se ablanda en 60 minutos; la res y el cerdo necesitan 90. */
@@ -23,5 +24,8 @@ public class Proteina extends Ingrediente {
     @Override
     public String getCategoria() {
         return "Proteína";
+    }
+    public String getTipo(){
+        return tipo;
     }
 }

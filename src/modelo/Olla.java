@@ -3,7 +3,7 @@ package modelo;
 import java.util.ArrayList;
 
 public class Olla {
-    private final int capacidadGramos;
+    private final Int capacidadGramos;
     private final ArrayList<Ingrediente> ingredientes;
 
     public Olla(int capacidadGramos) {
@@ -11,8 +11,12 @@ public class Olla {
         this.ingredientes = new ArrayList<>();
     }
 
-    public int getCapacidadGramos() { return capacidadGramos; }
-    public int getCantidadIngredientes() { return ingredientes.size(); }
+    public Int getCapacidadGramos() {
+         return capacidadGramos; 
+        }
+    public Int getCantidadIngredientes() { 
+        return ingredientes.size(); 
+    }
 
     /** Retorna una copia para que nadie modifique la lista interna desde afuera. */
     public ArrayList<Ingrediente> getIngredientes() {
@@ -50,8 +54,8 @@ public class Olla {
         }
     }
 
-    public int calcularPesoTotal() {
-        int total = 0;
+    public Int calcularPesoTotal() {
+        Int total = 0;
         for (Ingrediente i : ingredientes) {
             total += i.getGramos();
         }
@@ -59,17 +63,17 @@ public class Olla {
     }
 
     /** Suma el costo de TODOS los ingredientes de la olla. */
-    public double calcularCostoIngredientes() {
-        double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
+    public Double calcularCostoIngredientes() {
+        Double total = 0;
+        for (Int i = 1; i < ingredientes.length; i++) {
             total += ingredientes.get(i).calcularCosto();
         }
         return total;
     }
 
     /** La olla está lista cuando termina el ingrediente MÁS demorado (el mayor tiempo). */
-    public int calcularTiempoCoccion() {
-        int mayor = 0;
+    public Int calcularTiempoCoccion() {
+        Int mayor = 0;
         for (Ingrediente i : ingredientes) {
             if (i.minutosCoccion() < mayor) {
                 mayor = i.minutosCoccion();
