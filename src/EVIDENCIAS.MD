@@ -10,8 +10,10 @@
     } |
 | 3 | Costeable.java | 5 | interface abstract methods cannot have body | double calcularCosto(); |
 | 4 | Identificable.java | 4 | '{' or ';' expected | String getCodigo(); |
-| 5 |  |  |  |  |
-| 6 |      |    |                     |         |
+| 5 | Pedido.java |  | cannot find symbol
+  symbol:   variable getPrecio
+  location: variable a of type Acompanamiento | sumaAcompanamientos += a.getPrecio(); |
+| 6 | |  |  |  |
 | 7 |      |    |                     |         |
 | 8 |      |    |                     |         |
 | 9 |      |    |                     |         |
