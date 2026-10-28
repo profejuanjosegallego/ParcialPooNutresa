@@ -32,7 +32,7 @@ public class Pedido implements Costeable {
         for (Acompanamiento a : acompanamientos) {
             sumaAcompanamientos += a.getPrecio();
         }
-        return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
+        return (sancocho.calcularPrecioPorcion() + sumaAcompanamientos) * cantidad;
     }
 
     public String obtenerResumen() {
