@@ -1,4 +1,4 @@
-# Evidencias: <tu nombre completo>
+# Evidencias: Jorge Alexander Chaves Rivero
 
 ## 1. Errores de sintaxis corregidos
 | # | Archivo | Línea | Mensaje del compilador | Corrección |
@@ -9,8 +9,8 @@
         return precio;
     } |
 | 3 | Costeable.java | 5 | interface abstract methods cannot have body | double calcularCosto(); |
-| 4 |      |    |                     |         |
-| 5 |      |    |                     |         |
+| 4 | Identificable.java | 4 | '{' or ';' expected | String getCodigo(); |
+| 5 |  |  |  |  |
 | 6 |      |    |                     |         |
 | 7 |      |    |                     |         |
 | 8 |      |    |                     |         |
