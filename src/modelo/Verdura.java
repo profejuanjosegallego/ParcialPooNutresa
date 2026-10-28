@@ -1,6 +1,6 @@
 package modelo;
 
-public class Verdura extend Ingrediente {
+public class Verdura extends Ingrediente {
 
     public Verdura(String codigo, String nombre, int gramos, double precioKilo, boolean fresco) {
         super(codigo, nombre, gramos, precioKilo, fresco);
@@ -15,5 +15,11 @@ public class Verdura extend Ingrediente {
     @Override
     public String getCategoria() {
         return "Verdura";
+    }
+
+    @Override
+    public int minutosCoccion() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'minutosCoccion'");
     }
 }

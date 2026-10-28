@@ -6,7 +6,7 @@ public class Condimento extends Ingrediente {
     public Condimento(String codigo, String nombre, int gramos, double precioKilo,
                       boolean fresco, boolean seAgregaAlFinal) {
         super(codigo, nombre, gramos, precioKilo, fresco);
-        this.seAgregaAlFinal = alFinal;
+        this.seAgregaAlFinal = seAgregaAlFinal;
     }
 
     public boolean isSeAgregaAlFinal() { return seAgregaAlFinal; }
@@ -14,7 +14,7 @@ public class Condimento extends Ingrediente {
     /** Las hierbas que se echan al final (cilantro, guascas) necesitan 5 minutos; las demás, 20. */
     @Override
     public int minutosCoccion() {
-        int minutos;
+        int minutos = 0;
         if (seAgregaAlFinal) {
             minutos = 5;
         } else if (!seAgregaAlFinal) {
@@ -26,5 +26,11 @@ public class Condimento extends Ingrediente {
     @Override
     public String getCategoria() {
         return "Condimento";
+    }
+
+    @Override
+    public int minutosDeCoccion() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'minutosDeCoccion'");
     }
 }

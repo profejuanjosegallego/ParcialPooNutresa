@@ -30,7 +30,7 @@ public class Pedido implements Costeable {
     public double calcularCosto() {
         double sumaAcompanamientos = 0;
         for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
+            sumaAcompanamientos += a.getPrecio();
         }
         return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
     }
@@ -41,5 +41,11 @@ public class Pedido implements Costeable {
             texto += " + " + a.getNombre();
         }
         return texto + " = $" + String.format("%.0f", calcularCosto());
+    }
+
+    @Override
+    public int minutosDeCoccion() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'minutosDeCoccion'");
     }
 }
