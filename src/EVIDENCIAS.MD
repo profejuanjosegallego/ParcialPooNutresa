@@ -13,9 +13,9 @@
 | 5 | Pedido.java |  | cannot find symbol
   symbol:   variable getPrecio
   location: variable a of type Acompanamiento | sumaAcompanamientos += a.getPrecio(); |
-| 6 | |  |  |  |
-| 7 |      |    |                     |         |
-| 8 |      |    |                     |         |
+| 6 | Verdura.java | 3 | '{' expected | public class Verdura extends Ingrediente { |
+| 7 | Verdura.java | 10 | minutosDeCoccion() in Verdura does not override or implement a method from a supertype | public int minutosCoccion() { |
+| 7 |  |  |  |  |
 | 9 |      |    |                     |         |
 | 10 |      |    |                     |         |
 | 11 |      |    |                     |         |
