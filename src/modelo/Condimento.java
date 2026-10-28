@@ -3,10 +3,9 @@ package modelo;
 public class Condimento extends Ingrediente {
     private final boolean seAgregaAlFinal;
 
-    public Condimento(String codigo, String nombre, int gramos, double precioKilo,
-                      boolean fresco, boolean seAgregaAlFinal) {
+    public Condimento(String codigo, String nombre, int gramos, double precioKilo,boolean fresco, boolean seAgregaAlFinal) {
         super(codigo, nombre, gramos, precioKilo, fresco);
-        this.seAgregaAlFinal = alFinal;
+        this.seAgregaAlFinal = seAgregaAlFinal;
     }
 
     public boolean isSeAgregaAlFinal() { return seAgregaAlFinal; }
@@ -17,7 +16,7 @@ public class Condimento extends Ingrediente {
         int minutos;
         if (seAgregaAlFinal) {
             minutos = 5;
-        } else if (!seAgregaAlFinal) {
+        } else {
             minutos = 20;
         }
         return minutos;
