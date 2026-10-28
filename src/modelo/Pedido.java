@@ -15,9 +15,17 @@ public class Pedido implements Costeable {
         this.acompanamientos = new ArrayList<>();
     }
 
-    public int getMesa() { return mesa; }
-    public Sancocho getSancocho() { return sancocho; }
-    public int getCantidad() { return cantidad; }
+    public int getMesa() {
+        return mesa;
+    }
+
+    public Sancocho getSancocho() {
+        return sancocho;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
 
     public void agregarAcompanamiento(Acompanamiento acompanamiento) {
         if (acompanamiento != null) {
@@ -25,12 +33,15 @@ public class Pedido implements Costeable {
         }
     }
 
-    /** CADA plato lleva sus acompañamientos: (precio del plato + acompañamientos) × cantidad. */
+    /**
+     * CADA plato lleva sus acompañamientos: (precio del plato + acompañamientos) ×
+     * cantidad.
+     */
     @Override
     public double calcularCosto() {
         double sumaAcompanamientos = 0;
         for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
+            sumaAcompanamientos += a.getPrecio();
         }
         return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
     }
