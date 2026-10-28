@@ -35,9 +35,15 @@
 | 18 | Ingrediente.java | 25 | incompatible types: possible lossy conversion from double to int | public double getPrecioKilo() { return precioKilo; } |
 | 19 | Ingrediente.java | 67 | unclosed string literal | return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $" |
 | 20 | Ingrediente.java | 37 | unreported exception IllegalArgumentException; must be caught or declared to be thrown | throw new IllegalArgumentException("Los gramos deben ser mayores que 0"); |
-| 21 |  |  |  |  |
-| 22 |  |  |  |  |
-| 23 |  |  |  |  |
+| 21 | Fonda.java | 9-10 | cannot find symbol
+  symbol:   class ArrayList
+  location: class Fonda | private final ArrayList<Sancocho> menu;
+    private final ArrayList<Pedido> pedidos; |
+| 22 | Fonda.java | 46 | constructor Pedido in class Pedido cannot be applied to given types;
+  required: int,Sancocho,int
+  found:    int,Sancocho
+  reason: actual and formal argument lists differ in length | Pedido pedido = new Pedido(mesa, sancocho, cantidad); |
+| 23 | Fonda.java | 66 | package system does not exist | System.out.println("Menú de " + nombre + ":"); |
 | 24 |  |  |  |  |
 | 25 |  |  |  |  |
 (las 25 filas)
