@@ -24,9 +24,11 @@
   required: String,String,int,double,boolean
   found:    String,String,int,double
   reason: actual and formal argument lists differ in length | super(codigo, nombre, gramos, precioKilo, fresco); |
-| 12 |      |    |                     |         |
-| 13 |      |    |                     |         |
-| 14 |      |    |                     |         |
+| 12 | Olla.java | 45-52 | missing return statement | return null; |
+| 13 | Olla.java |  | cannot find symbol
+  symbol:   variable length
+  location: variable ingredientes of type ArrayList<Ingrediente> | for (int i = 1; i < ingredientes.size(); i++) { |
+| 14 |  |  |  |  |
 | 15 |      |    |                     |         |
 | 16 |      |    |                     |         |
 | 17 |      |    |                     |         |

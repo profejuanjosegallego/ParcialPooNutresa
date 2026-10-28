@@ -48,6 +48,7 @@ public class Olla {
                 return i;
             }
         }
+        return null;
     }
 
     public int calcularPesoTotal() {
@@ -61,7 +62,7 @@ public class Olla {
     /** Suma el costo de TODOS los ingredientes de la olla. */
     public double calcularCostoIngredientes() {
         double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
+        for (int i = 1; i < ingredientes.size(); i++) {
             total += ingredientes.get(i).calcularCosto();
         }
         return total;
