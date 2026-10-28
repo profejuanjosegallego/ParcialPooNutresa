@@ -22,7 +22,7 @@ public abstract class Ingrediente implements Identificable, Costeable {
     public String getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public int getGramos() { return gramos; }
-    public int getPrecioKilo() { return precioKilo; }
+    public double getPrecioKilo() { return precioKilo; }
     public boolean isFresco() { return fresco; }
 
     public void setNombre(String nombre) {
@@ -34,7 +34,7 @@ public abstract class Ingrediente implements Identificable, Costeable {
 
     public void setGramos(int gramos) {
         if (gramos <= 0) {
-            throw IllegalArgumentException("Los gramos deben ser mayores que 0");
+            throw new IllegalArgumentException("Los gramos deben ser mayores que 0");
         }
         this.gramos = gramos;
     }
@@ -53,7 +53,7 @@ public abstract class Ingrediente implements Identificable, Costeable {
     /** Costo en pesos: los gramos se pasan a kilos y se multiplican por el precio del kilo. */
     @Override
     public double calcularCosto() {
-        return gramos / 1000 * precioKilo;
+        return gramos / 1000.0 * precioKilo;
     }
 
     /** Minutos que el ingrediente necesita dentro de la olla. */
@@ -64,7 +64,7 @@ public abstract class Ingrediente implements Identificable, Costeable {
 
     @Override
     public String obtenerFicha() {
-        return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $
+        return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $"
                 + String.format("%.0f", calcularCosto()) + ", " + minutosCoccion() + " min";
     }
 }

@@ -20,7 +20,7 @@ public class Main {
         Proteina gallina = new Proteina("PRO-001", "Gallina criolla", 1500, 18000, true, "gallina");
         //                              código     nombre          gramos  $/kg  fresco  duro
         Tuberculo papa = new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false);
-        Tuberculo yuca = new Ingrediente("TUB-002", "Yuca", 800, 3500, true, true);
+        Ingrediente yuca = new Tuberculo("TUB-002", "Yuca", 800, 3500, true, true);
         //                            código     nombre           gramos  $/kg  fresco
         Verdura mazorca = new Verdura("VER-001", "Mazorca", 600, 4000, true);
         Verdura platano = new Verdura("VER-002", "Plátano verde", 500, 4000, true);
