@@ -1,285 +1,126 @@
-# Parcial práctico POO: La Fonda POO y su sancocho 🍲🇨🇴
-
-| | |
-|---|---|
-| **Duración** | 2 horas (120 minutos) |
-| **Lenguaje** | Java 17 o superior |
-| **Puntaje** | 100 puntos |
-| **Modalidad** | Individual |
-
----
-
-## 📖 Historia
-
-**La Fonda POO** vende el mejor sancocho de la ciudad. Doña Rosa arma cada olla con proteínas (gallina, res, cerdo), tubérculos (papa, yuca), verduras (mazorca, plátano) y condimentos (cilantro, guascas, ajo). Con eso calcula cuánto le cuesta la olla, cuánto se demora en estar lista, a cuánto vende cada plato y cuánto vendió en el día.
-
-El sistema lo hizo un sobrino que "sabía programar"... y lo dejó **roto**. No compila y, cuando lo hagas compilar, vas a ver que **los números no cuadran**: platos gratis, ollas que se desbordan, sancochos que "están listos" en 0 minutos. Tu trabajo es dejarlo funcionando.
-
----
-
-## ⚠️ Lee esto antes de empezar
-
-Este parcial tiene **dos fases** y se hacen **en orden**:
-
-```
-        FASE 1                          FASE 2
-  Errores de sintaxis      →      Errores de lógica
-  (que compile)                   (que los resultados sean correctos)
-  25 errores · ~55 min            10 errores · ~50 min
-```
-
-¿Por qué en este orden? Porque **no puedes probar la lógica de un programa que no compila**.
-
-Te quedan ~15 minutos para `EVIDENCIAS.md` y la entrega. **Administra tu tiempo**: si un error te bloquea más de 5 minutos, anótalo y sigue con otro.
-
-> 💡 **Haz commits mientras avanzas**, como mínimo: `Fase 1: el proyecto compila`, `Fase 2: corrige errores de lógica` y `Evidencias`. El historial de commits forma parte de la evaluación.
-
----
-
-## 🗂️ Estructura del proyecto
-
-```text
-src/
-  Main.java                  ← programa principal con los datos de prueba
-  modelo/
-    Identificable.java       ← interfaz: tiene código y ficha
-    Costeable.java           ← interfaz: tiene costo en pesos
-    Ingrediente.java         ← clase abstracta (padre de los 4 ingredientes)
-    Proteina.java            ← hereda de Ingrediente
-    Tuberculo.java           ← hereda de Ingrediente
-    Verdura.java             ← hereda de Ingrediente
-    Condimento.java          ← hereda de Ingrediente
-    Acompanamiento.java      ← arroz, aguacate, ají (es Costeable, NO es ingrediente)
-    Olla.java                ← contiene la lista de ingredientes
-    Sancocho.java            ← una olla convertida en platos para vender
-    Pedido.java              ← lo que pide una mesa
-  servicio/
-    Fonda.java               ← administra el menú y los pedidos
-```
-
-### Diagrama de clases
-
-```text
-   «interface»                    «interface»
-  Identificable                    Costeable
- + getCodigo(): String          + calcularCosto(): double
- + obtenerFicha(): String              ▲
-        ▲                              │ implements
-        │        ┌─────────────────────┼──────────────────┬────────────────┐
-        │        │                     │                  │                │
-        ├── «abstract» Ingrediente     │            Acompanamiento       Pedido
-        │   - codigo: String           │            - nombre             - mesa: int
-        │   - nombre: String           │            - precio             - sancocho: Sancocho
-        │   - gramos: int              │                                 - cantidad: int
-        │   - precioKilo: double       │                                 - acompanamientos:
-        │   - fresco: boolean          │                                   ArrayList<Acompanamiento>
-        │   + calcularCosto(): double  │
-        │   + minutosCoccion(): int        «abstract»
-        │   + getCategoria(): String       «abstract»
-        │          ▲                   │
-        │   ┌──────┼─────────┬─────────┴──┐
-        │ Proteina Tuberculo Verdura  Condimento
-        │ - tipo   - duro             - seAgregaAlFinal
-        │ 60/90min 40/25min  30min    5/20min
-        │
-        └── Sancocho ───────────► Olla
-            - codigo, nombre        - capacidadGramos: int
-            - porcionesTotales      - ingredientes: ArrayList<Ingrediente>
-            - porcionesDisponibles  + agregarIngrediente(Ingrediente): boolean
-            + calcularPrecioPorcion() + buscarPorCodigo(String): Ingrediente
-            + estaCompleto()        + calcularPesoTotal(): int
-            + esTrifasico()         + calcularCostoIngredientes(): double
-            + servir(int): boolean  + calcularTiempoCoccion(): int
-                                    + contarPorCategoria(String): int
-
- Fonda (servicio)
-  - nombre: String
-  - menu: ArrayList<Sancocho>
-  - pedidos: ArrayList<Pedido>
-  + agregarAlMenu(Sancocho)        + registrarPedido(int, String, int): Pedido
-  + buscarSancocho(String)         + calcularVentasDelDia(): double
-```
-
-### 📐 Reglas del negocio (las fórmulas)
-
-| Concepto | Regla |
-|---|---|
-| Costo de un ingrediente | `gramos / 1000 × precioKilo` (los gramos se pasan a **kilos**). Ej.: 1500 g de gallina a $18.000/kg = **$27.000** |
-| Minutos de cocción | Proteína: gallina **60**, res o cerdo **90**. Tubérculo: duro (yuca) **40**, blando (papa) **25**. Verdura: **30**. Condimento: si se echa al final **5**, si no **20** |
-| Tiempo de la olla | El del ingrediente **más demorado** (el mayor) |
-| Agregar a la olla | Solo si está **fresco**, su **código** no está repetido y **cabe**: peso actual + peso del nuevo ≤ capacidad |
-| Costo del sancocho | Costo de **todos** los ingredientes + **$100 por minuto** de gas |
-| Precio de un plato | `costo / porcionesTotales × 1.6` (60 % de ganancia) |
-| Sancocho completo | Tiene al menos una proteína, un tubérculo **y** un condimento |
-| Sancocho trifásico | Tiene **3 o más proteínas** |
-| Costo de un pedido | `(precio del plato + acompañamientos) × cantidad` (cada plato lleva sus acompañamientos) |
-| Registrar pedido | Solo si el sancocho está en el menú **y** alcanzan las porciones. Si no, **no se registra nada** |
-
----
-
-## ▶️ Compilar y ejecutar
-
-Desde la **raíz del proyecto** (la carpeta que contiene `src/`):
-
-```bash
-javac -encoding UTF-8 -d out src/modelo/*.java src/servicio/*.java src/Main.java
-java -cp out Main
-```
-
-> Si usas un IDE (IntelliJ, VS Code, NetBeans, Eclipse) también puedes ejecutar `Main` directamente, pero **comprueba al menos una vez con los comandos de arriba**.
-
----
-
-## 🔧 FASE 1: Errores de sintaxis (40 pts) · ⏱ ~55 min
-
-El proyecto tiene **exactamente 25 errores de compilación** repartidos en los 13 archivos. Corrígelos hasta que `javac` termine **sin ningún mensaje**.
-
-**Cómo trabajar:**
-
-1. Compila y lee el **primer** error: archivo, número de línea y mensaje.
-2. Ve a esa línea, entiende qué dice el mensaje y corrige.
-3. Vuelve a compilar. Repite.
-
-> 🧠 **Los errores aparecen por oleadas.** Java primero revisa que el código esté bien *escrito* (`;`, comillas, llaves...). Solo cuando eso está bien revisa tipos, herencia e interfaces. Y al final revisa que las variables tengan valor y que los métodos siempre retornen algo. Así que es normal corregir unos pocos errores y que aparezcan más de 20 nuevos (un mismo error puede producir varios mensajes). **No te asustes: vas avanzando.** Las últimas oleadas pueden traer **un solo error a la vez**.
-
-**Pistas de los mensajes que vas a encontrar:**
-
-| Mensaje del compilador | Qué suele significar |
-|---|---|
-| `';' expected` | Falta un punto y coma (fíjate también en la línea anterior) |
-| `'{' expected` | Algo mal escrito en la declaración de la clase |
-| `unclosed string literal` | Un texto entre comillas `"` al que le falta cerrar la comilla |
-| `unclosed character literal` | Usaste comillas simples `'...'` para un texto. En Java los `String` van con `"` |
-| `invalid method declaration; return type required` | El constructor no se llama **exactamente** igual que la clase |
-| `cannot find symbol` | Un nombre mal escrito, una variable que no existe, faltan `()` en una llamada, o falta un `import` |
-| `package system does not exist` | Java distingue mayúsculas de minúsculas |
-| `interface abstract methods cannot have body` | Un método de una interfaz no lleva `{ }` |
-| `incompatible types: possible lossy conversion` | Intentas devolver un `double` donde se declaró `int` |
-| `incompatible types: String cannot be converted to int` | `"60"` es un texto, `60` es un número |
-| `incompatible types: unexpected return value` | El método está declarado `void` pero retorna un valor |
-| `'void' type not allowed here` | Usas el resultado de un método `void` como si retornara algo |
-| `non-static method ... cannot be referenced from a static context` | Llamaste un método con el nombre de la **clase** en vez de un **objeto** |
-| `constructor X in class X cannot be applied to given types` | Llamas a un constructor (o a `super`) con argumentos de más o de menos |
-| `X is abstract; cannot be instantiated` | No se puede hacer `new` de una clase abstracta: usa la clase hija |
-| `incompatible types: Ingrediente cannot be converted to Proteina` | Un padre no se guarda en una variable de un hijo sin hacer *cast* `(Proteina)` |
-| `method does not override or implement a method from a supertype` | El `@Override` no coincide con el nombre/firma del método del padre |
-| `is not abstract and does not override abstract method` | Una clase concreta no implementó un método abstracto o de la interfaz |
-| `variable X might not have been initialized` | Hay un camino en el que la variable se usa sin haber recibido valor |
-| `missing return statement` | Hay un camino en el que el método termina sin retornar nada |
-
-**Reglas de la fase 1:**
-
-- ❌ No borres clases, métodos, atributos ni interfaces para "hacer que compile".
-- ❌ No cambies `abstract`, `extends` ni `implements`, y no uses `default` en las interfaces.
-- ❌ No "silencies" errores con *casts* como `(int)` o cambiando el tipo de un **atributo**.
-- ✅ Corrige el error **respetando la intención** del código: lee los comentarios `/** ... */` y la tabla de reglas del negocio, te dicen qué debe hacer cada método.
-
-✔️ **Terminaste la fase 1 cuando:** `javac` no muestra errores y `java -cp out Main` ejecuta las 6 secciones.
-
----
-
-## 🐞 FASE 2: Errores de lógica (45 pts) · ⏱ ~50 min
-
-Ahora el programa compila... pero **miente**. Hay **exactamente 10 errores de lógica**: código que Java acepta, pero que no cumple las reglas del negocio. Están en `Ingrediente`, `Tuberculo`, `Olla`, `Sancocho`, `Pedido` y `Fonda`. **`Main.java` no tiene errores de lógica.**
-
-Ejecuta el programa y compara **cada sección** con esta tabla. Cada fila que no coincida es una pista.
-
-| Sección | Qué se prueba | Resultado esperado |
-|---|---|---|
-| 1 | Costos de la olla de gallina (en orden) | `$27000`, `$3000`, `$2800`, `$2400`, `$2000`, `$1000`, `$1000` |
-| 1 | Minutos de la olla de gallina (en orden) | `60`, `25`, `40`, `30`, `30`, `5`, `5` |
-| 1 | `¿Se aceptó un ingrediente que no está fresco?` | `false` |
-| 1 | `¿Se aceptó un código repetido?` | `false` (la olla queda con **7** ingredientes, `4470/6000 g`) |
-| 2 | Olla trifásica | `5450/8000 g`; el cerdo cuesta `$17600`; la yuca, `40 min` |
-| 3 | `¿Cupo la yuca en la olla pequeña?` | `false` (la olla queda en `830/1000 g`) |
-| 4 | Ficha del sancocho de gallina | `60 min, costo $45200, plato $9040` |
-| 4 | Ficha del sancocho trifásico | `90 min, costo $80500, plato $12880` |
-| 4 | Ficha del caldo de papa | `25 min, costo $7900, plato $6320` |
-| 4 | `¿Está completo?` gallina / caldo | `true` / `false` |
-| 4 | `¿Es trifásico?` gallina / trifásico | `false` / `true` |
-| 5 | Pedido mesa 1 y mesa 2 | `$27080` y `$46140` |
-| 5 | Mesas 3 y 4 | rechazadas, cada una con su mensaje (`false`, `false`) |
-| 5 | Pedido mesa 5 | `$54240` |
-| 5 | `Pedidos registrados` / `Porciones de gallina que quedan` | `3` / `0` |
-| 5 | `Ventas del día` | `$127460` |
-| 6 | `Buscar PRO-001` | `Gallina criolla (gallina)` |
-| 6 | Polimorfismo | `Tuberculo $3000`, `Sancocho $45200`, `Acompanamiento $2000`, `Pedido $27080` |
-
-> 📝 **Algunos errores esconden a otros**: cuando arregles uno, vuelve a ejecutar y revisa **toda** la tabla de nuevo. Por ejemplo, mientras los costos estén mal no vas a poder saber si el precio de los pedidos está bien.
->
-> 🧮 Usa la tabla de **reglas del negocio** y haz las cuentas a mano (o con calculadora) para entender de dónde sale cada número.
->
-> 💡 Si en tu consola las tildes se ven raras (`Prote�na`), no es un error del programa: es la configuración de la consola.
-
-**Para cada error lógico encontrado**, escribe en `EVIDENCIAS.md`: el archivo y método, qué hacía mal, qué fila de la tabla te dio la pista y cómo lo corregiste.
-
-✔️ **Terminaste la fase 2 cuando:** toda la salida coincide con la tabla.
-
----
-
-## 📄 Entregable: `EVIDENCIAS.md` (15 pts, junto con los commits)
-
-Crea un archivo `EVIDENCIAS.md` en la raíz del proyecto con esta estructura:
-
-```markdown
-# Evidencias: <tu nombre completo>
+# Evidencias: Johann Felipe Hincapié Usuga
 
 ## 1. Errores de sintaxis corregidos
+
+> Completa las filas 1 a 23 con tus anotaciones (archivo, línea y mensaje de `javac`). Las filas 24 y 25 ya están llenas.
+
 | # | Archivo | Línea | Mensaje del compilador | Corrección |
 |---|---------|-------|------------------------|------------|
-| 1 | ...     | ...   | ...                    | ...        |
-(las 25 filas)
+| 1 | `modelo/Acompanamiento.java` | 4 | `cannot find symbol (symbol: class costeable)` | Se cambió `costeable` por `Costeable` con mayúscula inicial. |
+| 2 | `modelo/Acompanamiento.java` | 16 | `is not abstract and does not override abstract method calcularCosto() in Costeable` | Se cambió el nombre del método `calcularPrecio()` por `calcularCosto()`. |
+| 3 | `modelo/Costeable.java` | 5 | `interface abstract methods cannot have body` | Se eliminó el cuerpo `{ return 0; }` y se finalizó la firma del método con `;`. |
+| 4 | `modelo/Ingrediente.java` | 12 | `cannot find symbol (symbol: method trin())` | Se corrigió el nombre del método `trin()` por `trim()`. |
+| 5 | `modelo/Ingrediente.java` | 29 | `cannot find symbol (symbol: method trin())` | Se corrigió el nombre del método `trin()` por `trim()`. |
+| 6 | `modelo/Ingrediente.java` | 37 | `cannot find symbol (symbol: method IllegalArgumentException)` | Se agregó la palabra clave `new` antes de `IllegalArgumentException(...)`. |
+| 7 | `modelo/Olla.java` | 63 | `cannot find symbol (symbol: variable length)` | Se reemplazó `.length` por `.size()` para consultar el tamaño del `ArrayList`. |
+| 8 | `modelo/Pedido.java` | 33 | `cannot find symbol (symbol: variable getPrecio)` | Se agregaron los paréntesis `()` al invocar la función `a.getPrecio()`. |
+| 9 | `modelo/Proteina.java` | 8 | `constructor Ingrediente in class Ingrediente cannot be applied to given types` | Se incluyó el argumento `fresco` faltante dentro del llamado a `super(...)`. |
+| 10 | `modelo/Proteina.java` | 18 | `incompatible types: String cannot be converted to int` | Se reemplazó el texto `"60"` por el entero `60`. |
+| 11 | `modelo/Sancocho.java` | 9 | `cannot find symbol (symbol: class olla)` | Se cambió el tipo `olla` por `Olla` con mayúscula inicial. |
+| 12 | `modelo/Sancocho.java` | 34 | `non-static method calcularTiempoCoccion() cannot be referenced from a static context` | Se cambió la llamada estática `Olla.calcularTiempoCoccion()` por la llamada sobre la instancia `olla.calcularTiempoCoccion()`. |
+| 13 | `modelo/Sancocho.java` | 55 | `incompatible types: unexpected return value` | Se cambió el tipo de retorno de `void` a `boolean` en la firma del método `servir`. |
+| 14 | `modelo/Tuberculo.java` | 6 | `invalid method declaration; return type required` | Se renombró el constructor de `Tuberculos` a `Tuberculo` para que coincida con el nombre de la clase. |
+| 15 | `modelo/Tuberculo.java` | 22 | `unclosed character literal` | Se reemplazaron las comillas simples `'Tubérculo'` por comillas dobles `"Tubérculo"`. |
+| 16 | `modelo/Verdura.java` | 3 | `'{' expected` | Se corrigió la palabra clave `extend` por `extends`. |
+| 17 | `modelo/Verdura.java` | 11 | `method does not override or implement a method from a supertype` | Se renombró el método `minutosDeCoccion()` a `minutosCoccion()`. |
+| 18 | `servicio/Fonda.java` | 3 | `cannot find symbol (symbol: class ArrayList)` | Se agregó la importación `import java.util.ArrayList;`. |
+| 19 | `servicio/Fonda.java` | 45 | `constructor Pedido in class Pedido cannot be applied to given types` | Se agregó el parámetro faltante `cantidad` al invocar `new Pedido(mesa, sancocho, cantidad)`. |
+| 20 | `servicio/Fonda.java` | 65 | `package system does not exist` | Se cambió `system` en minúscula por `System` con mayúscula inicial. |
+| 21 | `modelo/Condimento.java` | 23 | `variable minutos might not have been initialized` | Se reemplazó la estructura `if/else if` por retornos directos dentro del método `minutosCoccion()`. |
+| 22 | `Main.java` | 24 | `Cannot instantiate the type Ingrediente` | Se cambió `new Ingrediente(...)` por la instanciación de la clase concreta `new Tuberculo(...)`. |
+| 23 | `Main.java` | 108 | `Type mismatch: cannot convert from Ingrediente to Proteina` | Se agregó el casteo explícito `(Proteina)` al invocar `ollaGallina.buscarPorCodigo("PRO-001")`. |
+| 24 | `Fonda.java` (`registrarPedido`) | ... | `constructor Pedido in class Pedido cannot be applied to given types` | El constructor de `Pedido` recibe 3 argumentos; se cambió `new Pedido(mesa, sancocho)` por `new Pedido(mesa, sancocho, cantidad)`. |
+| 25 | `Fonda.java` (`mostrarMenu`) | ... | `package system does not exist` | Java distingue mayúsculas de minúsculas; se cambió `system.out.println` por `System.out.println`. |
 
 ## 2. Errores de lógica corregidos
+
 | # | Archivo y método | Qué hacía mal | Pista (fila de la tabla) | Cómo lo corregí |
 |---|------------------|---------------|--------------------------|-----------------|
-(las 10 filas)
+| 1 | `Ingrediente.calcularCosto` | `gramos / 1000` es una división entera (ambos operandos `int`), así que 1500 g daba 1 kg en vez de 1,5 kg. | Sección 1, costos de la olla de gallina: la gallina daba `$18000` en vez de `$27000`. | Se cambió a `gramos / 1000.0 * precioKilo` para forzar la división con decimales. |
+| 2 | `Tuberculo.minutosCoccion` | Los tiempos estaban invertidos: `duro ? 25 : 40`. | Sección 1, minutos de la olla de gallina: la yuca (dura) daba 25 en vez de 40, y la papa daba 40 en vez de 25. | Se cambió a `duro ? 40 : 25`. |
+| 3 | `Olla.agregarIngrediente` | Solo comparaba el peso actual con la capacidad, sin sumar el peso del ingrediente nuevo. | Sección 3, `¿Cupo la yuca en la olla pequeña?` daba `true` en vez de `false`. | Se cambió la condición a `calcularPesoTotal() + nuevo.getGramos() > capacidadGramos`. |
+| 4 | `Olla.calcularCostoIngredientes` | El ciclo `for` empezaba en `i = 1` y se saltaba el primer ingrediente. | Sección 4, ficha del sancocho de gallina: el costo salía `$18200` menos de lo esperado (faltaba la gallina). | Se cambió el inicio del ciclo a `int i = 0`. |
+| 5 | `Olla.calcularTiempoCoccion` | Usaba `<` en vez de `>`, así que `mayor` nunca se actualizaba y la olla siempre quedaba lista en 0 minutos. | Sección 4, fichas de los sancochos: el tiempo salía `0 min`. | Se cambió el operador a `i.minutosCoccion() > mayor`. |
+| 6 | `Sancocho.estaCompleto` | Mezclaba `&&` y `\|\|`: bastaba tener un condimento para que dijera `true`. | Sección 4, `¿Está completo?` del caldo de papa daba `true` en vez de `false`. | Se unieron las tres condiciones (proteína, tubérculo y condimento) con `&&`. |
+| 7 | `Sancocho.esTrifasico` | Contaba todos los ingredientes (`getCantidadIngredientes() >= 3`) en vez de contar proteínas. | Sección 4, `¿Es trifásico?` del sancocho de gallina daba `true` en vez de `false`. | Se cambió a `olla.contarPorCategoria("Proteína") >= 3`. |
+| 8 | `Pedido.calcularCosto` | Los acompañamientos se sumaban una sola vez al total, pero cada plato lleva los suyos. | Sección 5, mesa 1 daba `$22580` en vez de `$27080` y mesa 2 `$41140` en vez de `$46140`. | Se cambió a `(sancocho.calcularPrecioPorcion() + sumaAcompanamientos) * cantidad`. |
+| 9 | `Fonda.registrarPedido` | Creaba y guardaba el pedido en la lista antes de verificar si alcanzaban las porciones, así que los pedidos rechazados quedaban registrados y se cobraban. | Sección 5, `Pedidos registrados` daba `4` en vez de `3` y `Ventas del día` `$181240` en vez de `$127460`. | Se reordenó: primero se llama a `servir`, y si falla se hace `return null`; solo después se crea el `Pedido` y se hace `pedidos.add`. |
 
 ## 3. Salida final del programa
-(pega aquí la salida completa de `java -cp out Main`, o una captura)
 
-## 4. Conceptos de POO en este proyecto
-Explica brevemente (2-3 líneas cada uno) DÓNDE se usa en este código:
-- **Encapsulamiento:**
-- **Herencia:**
-- **Abstracción (clase abstracta):**
-- **Interfaz:** (hay dos, ¿qué clases implementa cada una?)
-- **Polimorfismo:** (mira la sección 6 de Main)
+```text
+=== 1. Olla del sancocho de gallina ===
+No se agregó Cebolla larga: no está fresco.
+¿Se aceptó un ingrediente que no está fresco? false
+No se agregó Ñame: el código TUB-002 ya está en la olla.
+¿Se aceptó un código repetido? false
+Olla (4470/6000 g):
+  - Proteína [PRO-001] Gallina criolla - 1500 g, $27000, 60 min
+  - Tubérculo [TUB-001] Papa pastusa - 1000 g, $3000, 25 min
+  - Tubérculo [TUB-002] Yuca - 800 g, $2800, 40 min
+  - Verdura [VER-001] Mazorca - 600 g, $2400, 30 min
+  - Verdura [VER-002] Plátano verde - 500 g, $2000, 30 min
+  - Condimento [CON-001] Cilantro - 50 g, $1000, 5 min
+  - Condimento [CON-002] Guascas - 20 g, $1000, 5 min
+
+=== 2. Olla del sancocho trifásico ===
+Olla (5450/8000 g):
+  - Proteína [PRO-101] Gallina - 1000 g, $18000, 60 min
+  - Proteína [PRO-102] Costilla de res - 1000 g, $26000, 90 min
+  - Proteína [PRO-103] Cerdo - 800 g, $17600, 90 min
+  - Tubérculo [TUB-101] Papa pastusa - 1000 g, $3000, 25 min
+  - Tubérculo [TUB-102] Yuca - 1000 g, $3500, 40 min
+  - Verdura [VER-101] Mazorca - 600 g, $2400, 30 min
+  - Condimento [CON-101] Cilantro - 50 g, $1000, 5 min
+
+=== 3. Olla pequeña (caldo de papa) ===
+No se agregó Yuca: no cabe en la olla.
+¿Cupo la yuca en la olla pequeña? false
+Olla (830/1000 g):
+  - Tubérculo [TUB-201] Papa criolla - 800 g, $4800, 25 min
+  - Condimento [CON-201] Ajo - 30 g, $600, 20 min
+
+=== 4. Sancochos ===
+Sancocho [SAN-001] Sancocho de gallina - 8 porciones, 60 min, costo $45200, plato $9040
+Sancocho [SAN-002] Sancocho trifásico - 10 porciones, 90 min, costo $80500, plato $12880
+Sancocho [SAN-003] Caldo de papa - 2 porciones, 25 min, costo $7900, plato $6320
+¿El de gallina está completo? true
+¿El caldo de papa está completo? false
+¿El de gallina es trifásico? false
+¿El trifásico es trifásico? true
+
+=== 5. Pedidos en la fonda ===
+Mesa 1: 2 x Sancocho de gallina + Arroz + Aguacate = $27080
+Mesa 2: 3 x Sancocho trifásico + Arroz + Ají = $46140
+Mesa 3: no alcanzan las porciones de Sancocho de gallina (quedan 6).
+¿Se registró el pedido de la mesa 3? false
+Mesa 4: el sancocho SAN-999 no está en el menú.
+¿Se registró el pedido de la mesa 4? false
+Mesa 5: 6 x Sancocho de gallina = $54240
+Pedidos registrados: 3
+Porciones de gallina que quedan: 0
+Ventas del día: $127460
+
+=== 6. Polimorfismo ===
+Buscar PRO-001: Gallina criolla (gallina)
+Como Identificable: SAN-002
+Tuberculo cuesta $3000
+Sancocho cuesta $45200
+Acompanamiento cuesta $2000
+Pedido cuesta $27080
 ```
 
----
+## 4. Conceptos de POO en este proyecto
 
-## 📊 Rúbrica
+- **Encapsulamiento:** Los atributos de las clases son `private` (por ejemplo `gramos` y `precioKilo` en `Ingrediente`, o `porcionesDisponibles` en `Sancocho`) y solo se accede a ellos mediante getters y setters. Los setters validan los datos (`gramos` y `precioKilo` deben ser mayores que 0, `nombre` no puede estar vacío), y `Olla.getIngredientes()` devuelve una copia de la lista para que nadie la modifique desde afuera.
+- **Herencia:** `Proteina`, `Tuberculo`, `Verdura` y `Condimento` heredan de `Ingrediente` con `extends`. Reutilizan sus atributos y métodos (código, nombre, gramos, `calcularCosto`, `obtenerFicha`) y llaman al constructor del padre con `super(...)`, añadiendo solo lo propio: `tipo`, `duro` o `seAgregaAlFinal`.
+- **Abstracción (clase abstracta):** `Ingrediente` es abstracta porque no existe un "ingrediente genérico" que se pueda cocinar. Declara `minutosCoccion()` y `getCategoria()` como métodos abstractos, y cada hija está obligada a implementarlos a su manera. Por eso `new Ingrediente(...)` no compila.
+- **Interfaz:** Hay dos. `Identificable` (`getCodigo`, `obtenerFicha`) la implementan `Ingrediente` (y por herencia sus cuatro hijas) y `Sancocho`. `Costeable` (`calcularCosto`) la implementan `Ingrediente`, `Sancocho`, `Acompanamiento` y `Pedido`. Son contratos que clases sin relación de herencia pueden cumplir.
+- **Polimorfismo:** En la sección 6 de `Main` se crea un `ArrayList<Costeable>` con una `Tuberculo`, un `Sancocho`, un `Acompanamiento` y un `Pedido`. El ciclo llama a `c.calcularCosto()` sin saber el tipo real de cada objeto, y Java ejecuta la versión correcta en cada caso (por eso imprime `$3000`, `$45200`, `$2000` y `$27080`). Lo mismo ocurre dentro de `Olla`, que recorre `Ingrediente` y llama a `minutosCoccion()` sin importar si es proteína, tubérculo, verdura o condimento.
 
-| Fase | Criterio | Pts |
-|---|---|---|
-| 1 | El proyecto compila; los 25 errores están corregidos **respetando la intención** del código (1.6 pts c/u) | 40 |
-| 2 | Los 10 errores lógicos están corregidos y la salida coincide con la tabla (4.5 pts c/u) | 45 |
-| — | `EVIDENCIAS.md` completo (tablas, salida final y conceptos) y commits por fase | 15 |
-| | **Total** | **100** |
 
-**Penalizaciones:**
 
-- Eliminar clases, métodos, interfaces o relaciones de herencia: **−10 por cada caso**.
-- Cambiar los datos de prueba de `Main` para que "coincida" la tabla: **la fase 2 vale 0**.
-- Reemplazar un cálculo por el número esperado (ej. `return 45200;`): **ese error vale 0** y **−5** adicionales.
 
----
 
-## 📏 Reglas generales
 
-- ✅ Puedes agregar métodos auxiliares (`private`) y pruebas propias **al final** de `Main`.
-- ✅ Puedes consultar tus apuntes y la documentación oficial de Java.
-- ❌ No cambies las **firmas públicas** de los métodos (nombre, parámetros y tipo de retorno), salvo cuando eso sea justamente el error de sintaxis.
-- ❌ No uses bibliotecas externas, asistentes de IA, herramientas de reparación automática ni código de otra persona.
-- ❌ No modifiques los datos de prueba que ya vienen en `Main`.
 
----
-
-## 🚀 Entrega
-
-1. Sube tu proyecto a tu repositorio con **commits por fase** (mínimo 3 commits).
-2. Verifica que el repositorio tenga `src/` corregido y `EVIDENCIAS.md`.
-3. Entrega el enlace del repositorio al docente antes de que termine el tiempo.
-
-**¡Éxitos, y que no se le queme el sancocho! 🍲**
