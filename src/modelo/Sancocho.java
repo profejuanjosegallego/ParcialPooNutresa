@@ -1,69 +1,64 @@
 package modelo;
 
-public class Sancocho implements Identificable, Costeable {
-    public static final double COSTO_GAS_POR_MINUTO = 100;
-    public static final double MARGEN_GANANCIA = 0.60;
-
+public class Sancocho implements Costeable {
     private final String codigo;
     private final String nombre;
     private final Olla olla;
-    private final int porcionesTotales;
-    private int porcionesDisponibles;
+    private final int porciones;
 
     public Sancocho(String codigo, String nombre, Olla olla, int porciones) {
-        if (porciones <= 0) {
-            throw new IllegalArgumentException("Las porciones deben ser mayores que 0");
-        }
         this.codigo = codigo;
         this.nombre = nombre;
         this.olla = olla;
-        this.porcionesTotales = porciones;
-        this.porcionesDisponibles = porciones;
+        this.porciones = porciones;
     }
 
-    @Override
-    public String getCodigo() { return codigo; }
-    public String getNombre() { return nombre; }
-    public Olla getOlla() { return olla; }
-    public int getPorcionesTotales() { return porcionesTotales; }
-    public int getPorcionesDisponibles() { return porcionesDisponibles; }
+    public boolean estaCompleto() {
+        boolean tieneProteina = false;
+        boolean tieneTuberculo = false;
+        boolean tieneVerdura = false;
+        boolean tieneCondimento = false;
 
-    /** Costo de preparar la olla completa: ingredientes + gas (100 pesos por minuto de cocción). */
+        for (Ingrediente i : olla.getIngredientes()) {
+            if (i instanceof Proteina) tieneProteina = true;
+            if (i instanceof Tuberculo) tieneTuberculo = true;
+            if (i instanceof Verdura) tieneVerdura = true;
+            if (i instanceof Condimento) tieneCondimento = true;
+        }
+        return tieneProteina && tieneTuberculo && tieneVerdura && tieneCondimento;
+    }
+
+    public boolean esTrifasico() {
+        int carnes = 0;
+        for (Ingrediente i : olla.getIngredientes()) {
+            if (i instanceof Proteina) carnes++;
+        }
+        return carnes >= 3;
+    }
+
+    public String obtenerFicha() {
+        String estado = estaCompleto() ? "✅ Completo" : "❌ Incompleto";
+        return nombre + " (" + codigo + ") — " + porciones + " porciones — " + estado;
+    }
+
+    public int getPorcionesDisponibles() {
+        return porciones;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
     @Override
     public double calcularCosto() {
-        return olla.calcularCostoIngredientes() + Olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO;
+        return porciones * 15000;
     }
 
-    /** Precio de venta de UN plato: el costo de una porción más el 60 % de ganancia. */
-    public double calcularPrecioPorcion() {
-        return calcularCosto() / porcionesTotales * (1 + MARGEN_GANANCIA);
+    public boolean servir(int cantidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /** Un sancocho está completo si tiene al menos una proteína, un tubérculo Y un condimento. */
-    public boolean estaCompleto() {
-        return olla.contarPorCategoria("Proteína") > 0
-                && olla.contarPorCategoria("Tubérculo") > 0
-                || olla.contarPorCategoria("Condimento") > 0;
-    }
-
-    /** Es trifásico si lleva 3 o más proteínas (por ejemplo gallina, res y cerdo). */
-    public boolean esTrifasico() {
-        return olla.getCantidadIngredientes() >= 3;
-    }
-
-    /** Descuenta los platos si alcanzan las porciones. Si no alcanzan, no descuenta nada. */
-    public void servir(int cantidad) {
-        if (cantidad <= 0 || cantidad > porcionesDisponibles) {
-            return false;
-        }
-        porcionesDisponibles -= cantidad;
-        return true;
-    }
-
-    @Override
-    public String obtenerFicha() {
-        return "Sancocho [" + codigo + "] " + nombre + " - " + porcionesTotales + " porciones, "
-                + olla.calcularTiempoCoccion() + " min, costo $" + String.format("%.0f", calcularCosto())
-                + ", plato $" + String.format("%.0f", calcularPrecioPorcion());
+    public String getNombre() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

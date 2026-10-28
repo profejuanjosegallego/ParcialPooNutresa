@@ -1,45 +1,42 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Pedido implements Costeable {
+public class Pedido {
     private final int mesa;
     private final Sancocho sancocho;
-    private final int cantidad;
-    private final ArrayList<Acompanamiento> acompanamientos;
+    private final int porcionesSolicitadas;
+    private final List<Acompanamiento> acompanamientos;
 
-    public Pedido(int mesa, Sancocho sancocho, int cantidad) {
+    public Pedido(int mesa, Sancocho sancocho, int porciones) {
         this.mesa = mesa;
         this.sancocho = sancocho;
-        this.cantidad = cantidad;
+        this.porcionesSolicitadas = porciones;
         this.acompanamientos = new ArrayList<>();
     }
 
-    public int getMesa() { return mesa; }
-    public Sancocho getSancocho() { return sancocho; }
-    public int getCantidad() { return cantidad; }
-
-    public void agregarAcompanamiento(Acompanamiento acompanamiento) {
-        if (acompanamiento != null) {
-            acompanamientos.add(acompanamiento);
+    public void agregarAcompanamiento(Acompanamiento a) {
+        if (a != null) {
+            acompanamientos.add(a);
         }
-    }
-
-    /** CADA plato lleva sus acompañamientos: (precio del plato + acompañamientos) × cantidad. */
-    @Override
-    public double calcularCosto() {
-        double sumaAcompanamientos = 0;
-        for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
-        }
-        return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
     }
 
     public String obtenerResumen() {
-        String texto = "Mesa " + mesa + ": " + cantidad + " x " + sancocho.getNombre();
+        return "Mesa " + mesa + " — " + sancocho.obtenerFicha() +
+               " — Extras: " + acompanamientos.size();
+    }
+
+    public double calcularTotal() {
+        double total = sancocho.calcularCosto() * porcionesSolicitadas / sancocho.getPorcionesDisponibles();
         for (Acompanamiento a : acompanamientos) {
-            texto += " + " + a.getNombre();
+            total += a.calcularCosto();
         }
-        return texto + " = $" + String.format("%.0f", calcularCosto());
+        return total;
+    }
+
+    public double calcularCosto() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'calcularCosto'");
     }
 }
