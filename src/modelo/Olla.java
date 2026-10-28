@@ -33,7 +33,7 @@ public class Olla {
                     + ": el código " + nuevo.getCodigo() + " ya está en la olla.");
             return false;
         }
-        if (calcularPesoTotal() > capacidadGramos) {
+        if (calcularPesoTotal() + nuevo.getGramos() > capacidadGramos) { // LÓGICA: faltaba sumar el peso del nuevo
             System.out.println("No se agregó " + nuevo.getNombre() + ": no cabe en la olla.");
             return false;
         }
@@ -44,10 +44,11 @@ public class Olla {
     /** Retorna el ingrediente con ese código o null si no está en la olla. */
     public Ingrediente buscarPorCodigo(String codigo) {
         for (Ingrediente i : ingredientes) {
-            if (i.getNombre().equals(codigo)) {
+            if (i.getCodigo().equals(codigo)) { // LÓGICA: comparaba contra el nombre
                 return i;
             }
         }
+        return null;
     }
 
     public int calcularPesoTotal() {
@@ -61,7 +62,7 @@ public class Olla {
     /** Suma el costo de TODOS los ingredientes de la olla. */
     public double calcularCostoIngredientes() {
         double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
+        for (int i = 0; i < ingredientes.size(); i++) { // LÓGICA: empezaba en 1 y se saltaba el primero
             total += ingredientes.get(i).calcularCosto();
         }
         return total;
@@ -71,7 +72,7 @@ public class Olla {
     public int calcularTiempoCoccion() {
         int mayor = 0;
         for (Ingrediente i : ingredientes) {
-            if (i.minutosCoccion() < mayor) {
+            if (i.minutosCoccion() > mayor) { // LÓGICA: estaba "<"
                 mayor = i.minutosCoccion();
             }
         }
