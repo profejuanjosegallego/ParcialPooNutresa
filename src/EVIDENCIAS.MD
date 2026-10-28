@@ -28,8 +28,8 @@
 | 13 | Olla.java |  | cannot find symbol
   symbol:   variable length
   location: variable ingredientes of type ArrayList<Ingrediente> | for (int i = 1; i < ingredientes.size(); i++) { |
-| 14 |  |  |  |  |
-| 15 |      |    |                     |         |
+| 14 | Tuberculo.java | 6 | invalid method declaration; return type required | public Tuberculo(String codigo, String nombre, int gramos, double precioKilo, boolean fresco, boolean duro) { |
+| 15 | Tuberculo.java | 22 | not a statement | return "Tubérculo"; |
 | 16 |      |    |                     |         |
 | 17 |      |    |                     |         |
 | 18 |      |    |                     |         |
