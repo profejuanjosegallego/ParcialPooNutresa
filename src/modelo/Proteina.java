@@ -15,7 +15,7 @@ public class Proteina extends Ingrediente {
     @Override
     public int minutosCoccion() {
         if (tipo.equalsIgnoreCase("gallina")) {
-            return "60";
+            return 60;
         }
         return 90;
     }

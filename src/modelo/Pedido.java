@@ -9,12 +9,14 @@ public class Pedido implements Costeable {
     private final ArrayList<Acompanamiento> acompanamientos;
 
     public Pedido(int mesa, Sancocho sancocho, int cantidad) {
-        this.mesa = mesa;
-        this.sancocho = sancocho;
-        this.cantidad = cantidad;
-        this.acompanamientos = new ArrayList<>();
+    if (cantidad <= 0) {
+        throw new IllegalArgumentException("La cantidad debe ser mayor que 0");
     }
-
+    this.mesa = mesa;
+    this.sancocho = sancocho;
+    this.cantidad = cantidad;
+    this.acompaniamientos = new ArrayList<>();
+}
     public int getMesa() { return mesa; }
     public Sancocho getSancocho() { return sancocho; }
     public int getCantidad() { return cantidad; }
@@ -32,7 +34,7 @@ public class Pedido implements Costeable {
         for (Acompanamiento a : acompanamientos) {
             sumaAcompanamientos += a.getPrecio;
         }
-        return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
+        return (sancocho.calcularPrecioPorcion() + sumaAcompaniamientos) * cantidad;
     }
 
     public String obtenerResumen() {
