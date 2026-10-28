@@ -19,13 +19,7 @@ public class Condimento extends Ingrediente {
      */
     @Override
     public int minutosCoccion() {
-        int minutos;
-        if (seAgregaAlFinal) {
-            minutos = 5;
-        } else if (!seAgregaAlFinal) {
-            minutos = 20;
-        }
-        return minutos = 5;
+        return seAgregaAlFinal ? 5 : 20;
     }
 
     @Override

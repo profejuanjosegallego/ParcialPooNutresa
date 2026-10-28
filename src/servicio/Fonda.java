@@ -1,4 +1,5 @@
 package servicio;
+
 import java.util.ArrayList;
 import modelo.Pedido;
 import modelo.Sancocho;
@@ -14,8 +15,13 @@ public class Fonda {
         this.pedidos = new ArrayList<>();
     }
 
-    public String getNombre() { return nombre; }
-    public int getCantidadPedidos() { return pedidos.size(); }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getCantidadPedidos() {
+        return pedidos.size();
+    }
 
     public void agregarAlMenu(Sancocho sancocho) {
         if (sancocho != null) {
@@ -33,7 +39,8 @@ public class Fonda {
     }
 
     /**
-     * Registra el pedido SOLO si el sancocho está en el menú y alcanzan las porciones.
+     * Registra el pedido SOLO si el sancocho está en el menú y alcanzan las
+     * porciones.
      * Retorna el pedido creado, o null si no se pudo registrar.
      */
     public Pedido registrarPedido(int mesa, String codigoSancocho, int cantidad) {
@@ -42,13 +49,13 @@ public class Fonda {
             System.out.println("Mesa " + mesa + ": el sancocho " + codigoSancocho + " no está en el menú.");
             return null;
         }
-        Pedido pedido = new Pedido(mesa, sancocho, cantidad);
-        pedidos.add(pedido);
         if (!sancocho.servir(cantidad)) {
             System.out.println("Mesa " + mesa + ": no alcanzan las porciones de " + sancocho.getNombre()
                     + " (quedan " + sancocho.getPorcionesDisponibles() + ").");
             return null;
         }
+        Pedido pedido = new Pedido(mesa, sancocho, cantidad);
+        pedidos.add(pedido);
         return pedido;
     }
 

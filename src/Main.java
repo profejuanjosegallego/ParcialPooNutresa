@@ -16,15 +16,15 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== 1. Olla del sancocho de gallina ===");
         Olla ollaGallina = new Olla(6000);
-        //                              código     nombre             gramos  $/kg   fresco  tipo
+        // código nombre gramos $/kg fresco tipo
         Proteina gallina = new Proteina("PRO-001", "Gallina criolla", 1500, 18000, true, "gallina");
-        //                              código     nombre          gramos  $/kg  fresco  duro
+        // código nombre gramos $/kg fresco duro
         Tuberculo papa = new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false);
         Tuberculo yuca = new Tuberculo("TUB-002", "Yuca", 800, 3500, true, true);
-        //                            código     nombre           gramos  $/kg  fresco
+        // código nombre gramos $/kg fresco
         Verdura mazorca = new Verdura("VER-001", "Mazorca", 600, 4000, true);
         Verdura platano = new Verdura("VER-002", "Plátano verde", 500, 4000, true);
-        //                                   código     nombre      gramos  $/kg   fresco  alFinal
+        // código nombre gramos $/kg fresco alFinal
         Condimento cilantro = new Condimento("CON-001", "Cilantro", 50, 20000, true, true);
         Condimento guascas = new Condimento("CON-002", "Guascas", 20, 50000, true, true);
         ollaGallina.agregarIngrediente(gallina);
@@ -106,7 +106,8 @@ public class Main {
 
         System.out.println("\n=== 6. Polimorfismo ===");
         Ingrediente buscada = ollaGallina.buscarPorCodigo("PRO-001");
-        System.out.println("Buscar PRO-001: " + (buscada != null ? buscada.getNombre() + " (" + buscada.getCategoria() + ")" : "no encontrado"));
+        System.out.println("Buscar PRO-001: "
+                + (buscada != null ? buscada.getNombre() + " (" + buscada.getCategoria() + ")" : "no encontrado"));
         Identificable conCodigo = trifasico;
         System.out.println("Como Identificable: " + conCodigo.getCodigo());
         ArrayList<Costeable> cosasConPrecio = new ArrayList<>();
