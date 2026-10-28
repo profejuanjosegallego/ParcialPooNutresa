@@ -30,15 +30,16 @@
   location: variable ingredientes of type ArrayList<Ingrediente> | for (int i = 1; i < ingredientes.size(); i++) { |
 | 14 | Tuberculo.java | 6 | invalid method declaration; return type required | public Tuberculo(String codigo, String nombre, int gramos, double precioKilo, boolean fresco, boolean duro) { |
 | 15 | Tuberculo.java | 22 | not a statement | return "Tubérculo"; |
-| 16 |      |    |                     |         |
-| 17 |      |    |                     |         |
-| 18 |      |    |                     |         |
-| 19 |      |    |                     |         |
-| 20 |      |    |                     |         |
-| 21 |      |    |                     |         |
-| 23 |      |    |                     |         |
-| 24 |      |    |                     |         |
-| 25 |      |    |                     |         |
+| 16 | Sancocho.java | 34 | non-static method calcularTiempoCoccion() cannot be referenced from a static context | return olla.calcularCostoIngredientes() + olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO; |
+| 17 | Sancocho.java | 55 | Void methods cannot return a value | public boolean servir(int cantidad) { |
+| 18 | Ingrediente.java | 25 | incompatible types: possible lossy conversion from double to int | public double getPrecioKilo() { return precioKilo; } |
+| 19 | Ingrediente.java | 67 | unclosed string literal | return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $" |
+| 20 | Ingrediente.java | 37 | unreported exception IllegalArgumentException; must be caught or declared to be thrown | throw new IllegalArgumentException("Los gramos deben ser mayores que 0"); |
+| 21 |  |  |  |  |
+| 22 |  |  |  |  |
+| 23 |  |  |  |  |
+| 24 |  |  |  |  |
+| 25 |  |  |  |  |
 (las 25 filas)
 
 ## 2. Errores de lógica corregidos
