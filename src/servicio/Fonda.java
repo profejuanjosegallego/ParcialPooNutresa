@@ -1,7 +1,8 @@
 package servicio;
 
-import modelo.Pedido;
-import modelo.Sancocho;
+import java.util.ArrayList;
+import modelos.Pedido;
+import modelos.Sancocho;
 
 public class Fonda {
     private final String nombre;
@@ -42,13 +43,14 @@ public class Fonda {
             System.out.println("Mesa " + mesa + ": el sancocho " + codigoSancocho + " no está en el menú.");
             return null;
         }
-        Pedido pedido = new Pedido(mesa, sancocho);
-        pedidos.add(pedido);
-        if (!sancocho.servir(cantidad)) {
+    if (!sancocho.servir(cantidad)) {
             System.out.println("Mesa " + mesa + ": no alcanzan las porciones de " + sancocho.getNombre()
                     + " (quedan " + sancocho.getPorcionesDisponibles() + ").");
             return null;
+
         }
+        Pedido pedido = new Pedido(mesa, sancocho, cantidad);
+        pedidos.add(pedido);
         return pedido;
     }
 
@@ -62,7 +64,7 @@ public class Fonda {
     }
 
     public void mostrarMenu() {
-        system.out.println("Menú de " + nombre + ":");
+        System.out.println("Menú de " + nombre + ":");
         for (Sancocho s : menu) {
             System.out.println("  - " + s.obtenerFicha());
         }

@@ -1,7 +1,7 @@
-package modelo;
+package modelos;
 
 public interface Identificable {
-    String getCodigo()
+    String getCodigo();
 
     String obtenerFicha();
 }

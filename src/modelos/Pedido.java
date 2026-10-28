@@ -1,4 +1,4 @@
-package modelo;
+package modelos;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class Pedido implements Costeable {
     public double calcularCosto() {
         double sumaAcompanamientos = 0;
         for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
+            sumaAcompanamientos += a.getPrecio();
         }
         return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
     }
