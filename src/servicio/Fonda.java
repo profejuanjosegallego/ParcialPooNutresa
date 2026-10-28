@@ -1,70 +1,51 @@
 package servicio;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import modelo.Pedido;
 import modelo.Sancocho;
 
 public class Fonda {
-    private final String nombre;
-    private final ArrayList<Sancocho> menu;
-    private final ArrayList<Pedido> pedidos;
+    private String nombre;
+    private Map<String, Sancocho> menu;
+    private List<Pedido> pedidos;
 
     public Fonda(String nombre) {
         this.nombre = nombre;
-        this.menu = new ArrayList<>();
+        this.menu = new HashMap<>();
         this.pedidos = new ArrayList<>();
     }
 
-    public String getNombre() { return nombre; }
-    public int getCantidadPedidos() { return pedidos.size(); }
-
     public void agregarAlMenu(Sancocho sancocho) {
         if (sancocho != null) {
-            menu.add(sancocho);
+            menu.put(sancocho.getCodigo(), sancocho);
         }
     }
 
-    public Sancocho buscarSancocho(String codigo) {
-        for (Sancocho s : menu) {
-            if (s.getCodigo().equals(codigo)) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Registra el pedido SOLO si el sancocho está en el menú y alcanzan las porciones.
-     * Retorna el pedido creado, o null si no se pudo registrar.
-     */
-    public Pedido registrarPedido(int mesa, String codigoSancocho, int cantidad) {
-        Sancocho sancocho = buscarSancocho(codigoSancocho);
+    public Pedido registrarPedido(int mesa, String codigoSancocho, int porciones) {
+        Sancocho sancocho = menu.get(codigoSancocho);
         if (sancocho == null) {
-            System.out.println("Mesa " + mesa + ": el sancocho " + codigoSancocho + " no está en el menú.");
             return null;
         }
-        Pedido pedido = new Pedido(mesa, sancocho);
-        pedidos.add(pedido);
-        if (!sancocho.servir(cantidad)) {
-            System.out.println("Mesa " + mesa + ": no alcanzan las porciones de " + sancocho.getNombre()
-                    + " (quedan " + sancocho.getPorcionesDisponibles() + ").");
+        if (!sancocho.reducirPorciones(porciones)) {
             return null;
         }
-        return pedido;
+        Pedido nuevoPedido = new Pedido(mesa, sancocho, porciones);
+        pedidos.add(nuevoPedido);
+        return nuevoPedido;
     }
 
-    /** Suma lo que pagan TODOS los pedidos registrados. */
+    public int getCantidadPedidos() {
+        return pedidos.size();
+    }
+
     public double calcularVentasDelDia() {
-        double total = 0;
+        double totalVentas = 0;
         for (Pedido p : pedidos) {
-            total += p.calcularCosto();
+            totalVentas += p.calcularCosto();
         }
-        return total;
-    }
-
-    public void mostrarMenu() {
-        system.out.println("Menú de " + nombre + ":");
-        for (Sancocho s : menu) {
-            System.out.println("  - " + s.obtenerFicha());
-        }
+        return totalVentas;
     }
 }

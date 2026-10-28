@@ -1,30 +1,19 @@
 package modelo;
 
 public class Condimento extends Ingrediente {
-    private final boolean seAgregaAlFinal;
+    private boolean alFinal;
 
-    public Condimento(String codigo, String nombre, int gramos, double precioKilo,
-                      boolean fresco, boolean seAgregaAlFinal) {
+    public Condimento(String codigo, String nombre, double gramos, double precioKilo, boolean fresco, boolean alFinal) {
         super(codigo, nombre, gramos, precioKilo, fresco);
-        this.seAgregaAlFinal = alFinal;
+        this.alFinal = alFinal;
     }
 
-    public boolean isSeAgregaAlFinal() { return seAgregaAlFinal; }
-
-    /** Las hierbas que se echan al final (cilantro, guascas) necesitan 5 minutos; las demás, 20. */
-    @Override
-    public int minutosCoccion() {
-        int minutos;
-        if (seAgregaAlFinal) {
-            minutos = 5;
-        } else if (!seAgregaAlFinal) {
-            minutos = 20;
-        }
-        return minutos;
+    public boolean isAlFinal() {
+        return alFinal;
     }
 
     @Override
-    public String getCategoria() {
-        return "Condimento";
+    public int getTiempoCoccion() {
+        return alFinal ? 5 : 15;
     }
 }

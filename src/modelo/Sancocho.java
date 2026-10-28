@@ -1,69 +1,86 @@
 package modelo;
 
-public class Sancocho implements Identificable, Costeable {
-    public static final double COSTO_GAS_POR_MINUTO = 100;
-    public static final double MARGEN_GANANCIA = 0.60;
+import java.util.HashSet;
+import java.util.Set;
 
-    private final String codigo;
-    private final String nombre;
-    private final Olla olla;
-    private final int porcionesTotales;
+public class Sancocho implements Identificable, Costeable {
+    private String codigo;
+    private String nombre;
+    private Olla olla;
+    private int porcionesTotales;
     private int porcionesDisponibles;
 
-    public Sancocho(String codigo, String nombre, Olla olla, int porciones) {
-        if (porciones <= 0) {
-            throw new IllegalArgumentException("Las porciones deben ser mayores que 0");
-        }
+    public Sancocho(String codigo, String nombre, Olla olla, int porcionesTotales) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.olla = olla;
-        this.porcionesTotales = porciones;
-        this.porcionesDisponibles = porciones;
+        this.porcionesTotales = porcionesTotales;
+        this.porcionesDisponibles = porcionesTotales;
     }
 
     @Override
-    public String getCodigo() { return codigo; }
-    public String getNombre() { return nombre; }
-    public Olla getOlla() { return olla; }
-    public int getPorcionesTotales() { return porcionesTotales; }
-    public int getPorcionesDisponibles() { return porcionesDisponibles; }
+    public String getCodigo() {
+        return codigo;
+    }
 
-    /** Costo de preparar la olla completa: ingredientes + gas (100 pesos por minuto de cocción). */
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getPorcionesDisponibles() {
+        return porcionesDisponibles;
+    }
+
+    public boolean reducirPorciones(int cantidad) {
+        if (cantidad <= porcionesDisponibles) {
+            porcionesDisponibles -= cantidad;
+            return true;
+        }
+        return false;
+    }
+
+    public int getTiempoCoccion() {
+        return olla.calcularTiempoCoccion();
+    }
+
     @Override
     public double calcularCosto() {
-        return olla.calcularCostoIngredientes() + Olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO;
+        return olla.calcularCostoTotal();
     }
 
-    /** Precio de venta de UN plato: el costo de una porción más el 60 % de ganancia. */
-    public double calcularPrecioPorcion() {
-        return calcularCosto() / porcionesTotales * (1 + MARGEN_GANANCIA);
+    public double getPrecioVentaPlato() {
+        return (calcularCosto() / porcionesTotales) * 1.6;
     }
 
-    /** Un sancocho está completo si tiene al menos una proteína, un tubérculo Y un condimento. */
-    public boolean estaCompleto() {
-        return olla.contarPorCategoria("Proteína") > 0
-                && olla.contarPorCategoria("Tubérculo") > 0
-                || olla.contarPorCategoria("Condimento") > 0;
-    }
-
-    /** Es trifásico si lleva 3 o más proteínas (por ejemplo gallina, res y cerdo). */
-    public boolean esTrifasico() {
-        return olla.getCantidadIngredientes() >= 3;
-    }
-
-    /** Descuenta los platos si alcanzan las porciones. Si no alcanzan, no descuenta nada. */
-    public void servir(int cantidad) {
-        if (cantidad <= 0 || cantidad > porcionesDisponibles) {
-            return false;
-        }
-        porcionesDisponibles -= cantidad;
-        return true;
-    }
-
-    @Override
     public String obtenerFicha() {
-        return "Sancocho [" + codigo + "] " + nombre + " - " + porcionesTotales + " porciones, "
-                + olla.calcularTiempoCoccion() + " min, costo $" + String.format("%.0f", calcularCosto())
-                + ", plato $" + String.format("%.0f", calcularPrecioPorcion());
+        return String.format("Sancocho [%s] %s - %d porciones, %d min, costo $%.0f, plato $%.0f",
+                codigo, nombre, porcionesTotales, getTiempoCoccion(), calcularCosto(), getPrecioVentaPlato());
+    }
+
+    public boolean estaCompleto() {
+        boolean tieneProteina = false;
+        boolean tieneTuberculo = false;
+        boolean tieneVerdura = false;
+
+        for (Ingrediente ing : olla.getIngredientes()) {
+            if (ing instanceof Proteina) {
+                tieneProteina = true;
+            } else if (ing instanceof Tuberculo) {
+                tieneTuberculo = true;
+            } else if (ing instanceof Verdura) {
+                tieneVerdura = true;
+            }
+        }
+        return tieneProteina && tieneTuberculo && tieneVerdura;
+    }
+
+    public boolean esTrifasico() {
+        Set<String> proteinas = new HashSet<>();
+        for (Ingrediente ing : olla.getIngredientes()) {
+            if (ing instanceof Proteina) {
+                proteinas.add(((Proteina) ing).getTipo());
+            }
+        }
+        return proteinas.size() >= 3;
     }
 }

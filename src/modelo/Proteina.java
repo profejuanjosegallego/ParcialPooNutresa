@@ -1,27 +1,28 @@
 package modelo;
 
 public class Proteina extends Ingrediente {
-    private final String tipo;
+    private String tipo;
 
-    public Proteina(String codigo, String nombre, int gramos, double precioKilo,
-                    boolean fresco, String tipo) {
-        super(codigo, nombre, gramos, precioKilo);
-        this.tipo = tipo;
+    public Proteina(String codigo, String nombre, double gramos, double precioKilo, boolean fresco, String tipo) {
+        super(codigo, nombre, gramos, precioKilo, fresco);
+        this.tipo = tipo.toLowerCase();
     }
 
-    public String getTipo() { return tipo; }
+    public String getTipo() {
+        return tipo;
+    }
 
-    /** La gallina se ablanda en 60 minutos; la res y el cerdo necesitan 90. */
     @Override
-    public int minutosCoccion() {
-        if (tipo.equalsIgnoreCase("gallina")) {
-            return "60";
+    public int getTiempoCoccion() {
+        switch (tipo) {
+            case "res":
+                return 90;
+            case "gallina":
+                return 60;
+            case "cerdo":
+                return 45;
+            default:
+                return 50;
         }
-        return 90;
-    }
-
-    @Override
-    public String getCategoria() {
-        return "Proteína";
     }
 }

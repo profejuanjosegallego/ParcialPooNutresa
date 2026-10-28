@@ -1,45 +1,39 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido implements Costeable {
-    private final int mesa;
-    private final Sancocho sancocho;
-    private final int cantidad;
-    private final ArrayList<Acompanamiento> acompanamientos;
+    private int numeroMesa;
+    private Sancocho sancocho;
+    private int cantidadPorciones;
+    private List<Acompanamiento> acompanamientos;
 
-    public Pedido(int mesa, Sancocho sancocho, int cantidad) {
-        this.mesa = mesa;
+    public Pedido(int numeroMesa, Sancocho sancocho, int cantidadPorciones) {
+        this.numeroMesa = numeroMesa;
         this.sancocho = sancocho;
-        this.cantidad = cantidad;
+        this.cantidadPorciones = cantidadPorciones;
         this.acompanamientos = new ArrayList<>();
     }
 
-    public int getMesa() { return mesa; }
-    public Sancocho getSancocho() { return sancocho; }
-    public int getCantidad() { return cantidad; }
-
-    public void agregarAcompanamiento(Acompanamiento acompanamiento) {
-        if (acompanamiento != null) {
-            acompanamientos.add(acompanamiento);
+    public void agregarAcompanamiento(Acompanamiento acomp) {
+        if (acomp != null) {
+            acompanamientos.add(acomp);
         }
     }
 
-    /** CADA plato lleva sus acompañamientos: (precio del plato + acompañamientos) × cantidad. */
     @Override
     public double calcularCosto() {
-        double sumaAcompanamientos = 0;
+        double precioBasePlato = sancocho.getPrecioVentaPlato();
+        double costoAcompanamientos = 0;
         for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
+            costoAcompanamientos += a.calcularCosto();
         }
-        return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
+        return (precioBasePlato + costoAcompanamientos) * cantidadPorciones;
     }
 
     public String obtenerResumen() {
-        String texto = "Mesa " + mesa + ": " + cantidad + " x " + sancocho.getNombre();
-        for (Acompanamiento a : acompanamientos) {
-            texto += " + " + a.getNombre();
-        }
-        return texto + " = $" + String.format("%.0f", calcularCosto());
+        return String.format("Pedido Mesa %d: %d platos de %s - Total: $%.0f",
+                numeroMesa, cantidadPorciones, sancocho.getNombre(), calcularCosto());
     }
 }
