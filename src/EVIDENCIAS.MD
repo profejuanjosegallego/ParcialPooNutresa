@@ -4,11 +4,11 @@
 | # | Archivo | Línea | Mensaje del compilador | Corrección |
 |---|---------|-------|------------------------|------------|
 | 1 | Acompanamiento.java | 14 | ';' expected | public double getPrecio() { return precio; } |
-| 2 | Acompanamiento.java | 4 | The type Acompanamiento must implement the inherited abstract method Costeable.calcularCosto() | @Override
+| 2 | Acompanamiento.java | 16 | Acompanamiento is not abstract and does not override abstract method calcularCosto() in Costeable | @Override
     public double calcularCosto() {
         return precio;
     } |
-| 3 |      |    |                     |         |
+| 3 | Costeable.java | 5 | interface abstract methods cannot have body | double calcularCosto(); |
 | 4 |      |    |                     |         |
 | 5 |      |    |                     |         |
 | 6 |      |    |                     |         |
