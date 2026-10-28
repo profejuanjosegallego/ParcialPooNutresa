@@ -1,6 +1,6 @@
 package modelo;
 
-public class Tuberculo extends Ingrediente {
+public class Tuberculos extends Ingrediente {
     private final boolean duro;
 
     public Tuberculos(String codigo, String nombre, int gramos, double precioKilo,
@@ -19,6 +19,6 @@ public class Tuberculo extends Ingrediente {
 
     @Override
     public String getCategoria() {
-        return 'Tubérculo';
+        return "Tubérculo";
     }
 }

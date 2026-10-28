@@ -8,7 +8,7 @@ import modelo.Olla;
 import modelo.Pedido;
 import modelo.Proteina;
 import modelo.Sancocho;
-import modelo.Tuberculo;
+import modelo.Tuberculos;
 import modelo.Verdura;
 import servicio.Fonda;
 
@@ -19,8 +19,8 @@ public class Main {
         //                              código     nombre             gramos  $/kg   fresco  tipo
         Proteina gallina = new Proteina("PRO-001", "Gallina criolla", 1500, 18000, true, "gallina");
         //                              código     nombre          gramos  $/kg  fresco  duro
-        Tuberculo papa = new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false);
-        Tuberculo yuca = new Ingrediente("TUB-002", "Yuca", 800, 3500, true, true);
+        Tuberculos papa = new Tuberculos("TUB-001", "Papa pastusa", 1000, 3000, true, false);
+        Tuberculos yuca = new Tuberculos("TUB-002", "Yuca", 800, 3500, true, true);
         //                            código     nombre           gramos  $/kg  fresco
         Verdura mazorca = new Verdura("VER-001", "Mazorca", 600, 4000, true);
         Verdura platano = new Verdura("VER-002", "Plátano verde", 500, 4000, true);
@@ -36,7 +36,7 @@ public class Main {
         ollaGallina.agregarIngrediente(guascas);
         Verdura cebolla = new Verdura("VER-003", "Cebolla larga", 100, 5000, false);
         System.out.println("¿Se aceptó un ingrediente que no está fresco? " + ollaGallina.agregarIngrediente(cebolla));
-        Tuberculo name = new Tuberculo("TUB-002", "Ñame", 700, 4000, true, true);
+        Tuberculos name = new Tuberculos("TUB-002", "Ñame", 700, 4000, true, true);
         System.out.println("¿Se aceptó un código repetido? " + ollaGallina.agregarIngrediente(name));
         ollaGallina.mostrarIngredientes();
 
@@ -45,17 +45,17 @@ public class Main {
         ollaTrifasica.agregarIngrediente(new Proteina("PRO-101", "Gallina", 1000, 18000, true, "gallina"));
         ollaTrifasica.agregarIngrediente(new Proteina("PRO-102", "Costilla de res", 1000, 26000, true, "res"));
         ollaTrifasica.agregarIngrediente(new Proteina("PRO-103", "Cerdo", 800, 22000, true, "cerdo"));
-        ollaTrifasica.agregarIngrediente(new Tuberculo("TUB-101", "Papa pastusa", 1000, 3000, true, false));
-        ollaTrifasica.agregarIngrediente(new Tuberculo("TUB-102", "Yuca", 1000, 3500, true, true));
+        ollaTrifasica.agregarIngrediente(new Tuberculos("TUB-101", "Papa pastusa", 1000, 3000, true, false));
+        ollaTrifasica.agregarIngrediente(new Tuberculos("TUB-102", "Yuca", 1000, 3500, true, true));
         ollaTrifasica.agregarIngrediente(new Verdura("VER-101", "Mazorca", 600, 4000, true));
         ollaTrifasica.agregarIngrediente(new Condimento("CON-101", "Cilantro", 50, 20000, true, true));
         ollaTrifasica.mostrarIngredientes();
 
         System.out.println("\n=== 3. Olla pequeña (caldo de papa) ===");
         Olla ollaPequena = new Olla(1000);
-        ollaPequena.agregarIngrediente(new Tuberculo("TUB-201", "Papa criolla", 800, 6000, true, false));
+        ollaPequena.agregarIngrediente(new Tuberculos("TUB-201", "Papa criolla", 800, 6000, true, false));
         ollaPequena.agregarIngrediente(new Condimento("CON-201", "Ajo", 30, 20000, true, false));
-        Tuberculo yucaExtra = new Tuberculo("TUB-202", "Yuca", 300, 3500, true, true);
+        Tuberculos yucaExtra = new Tuberculos("TUB-202", "Yuca", 300, 3500, true, true);
         System.out.println("¿Cupo la yuca en la olla pequeña? " + ollaPequena.agregarIngrediente(yucaExtra));
         ollaPequena.mostrarIngredientes();
 
@@ -105,8 +105,8 @@ public class Main {
         System.out.printf("Ventas del día: $%.0f%n", fonda.calcularVentasDelDia());
 
         System.out.println("\n=== 6. Polimorfismo ===");
-        Proteina buscada = ollaGallina.buscarPorCodigo("PRO-001");
-        System.out.println("Buscar PRO-001: " + (buscada != null ? buscada.getNombre() + " (" + buscada.getTipo() + ")" : "no encontrado"));
+        Ingrediente buscada = ollaGallina.buscarPorCodigo("PRO-001");
+        System.out.println("Buscar PRO-001: " + (buscada != null ? buscada.getNombre() + " (" + buscada.getCategoria() + ")" : "no encontrado"));
         Identificable conCodigo = trifasico;
         System.out.println("Como Identificable: " + conCodigo.getCodigo());
         ArrayList<Costeable> cosasConPrecio = new ArrayList<>();
