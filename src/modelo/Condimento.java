@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 public class Condimento extends Ingrediente {
     private final boolean seAgregaAlFinal;

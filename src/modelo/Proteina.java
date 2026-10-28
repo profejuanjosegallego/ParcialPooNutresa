@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 public class Proteina extends Ingrediente {
     private final String tipo;

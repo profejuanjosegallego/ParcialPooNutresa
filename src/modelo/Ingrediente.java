@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 public abstract class Ingrediente implements Identificable, Costeable {
     private final String codigo;

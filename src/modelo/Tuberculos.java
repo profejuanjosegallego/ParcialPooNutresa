@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 public class Tuberculos  extends Ingrediente {
     private final boolean duro;

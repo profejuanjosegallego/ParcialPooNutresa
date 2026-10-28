@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 /** Lo que va en el plato aparte: arroz, aguacate, ají... */
 public class Acompanamiento implements Costeable {

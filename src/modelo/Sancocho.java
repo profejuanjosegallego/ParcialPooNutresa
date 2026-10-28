@@ -1,4 +1,4 @@
-package modelos;
+package modelo;
 
 public class Sancocho implements Identificable, Costeable {
     public static final double COSTO_GAS_POR_MINUTO = 100;

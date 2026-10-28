@@ -1,8 +1,8 @@
 package servicio;
 
 import java.util.ArrayList;
-import modelos.Pedido;
-import modelos.Sancocho;
+import modelo.Pedido;
+import modelo.Sancocho;
 
 public class Fonda {
     private final String nombre;
