@@ -19,8 +19,11 @@
   symbol:   variable alFinal
   location: class Condimento | this.seAgregaAlFinal = seAgregaAlFinal; |
 | 9 | Condimento.java | 17 | variable minutos might not have been initialized | int minutos = 0; |
-| 10 |      |    |                     |         |
-| 11 |      |    |                     |         |
+| 10 | Proteina.java | 18 | incompatible types: String cannot be converted to int | return 60; |
+| 11 | Proteina.java | 8 | constructor Ingrediente in class Ingrediente cannot be applied to given types;
+  required: String,String,int,double,boolean
+  found:    String,String,int,double
+  reason: actual and formal argument lists differ in length | super(codigo, nombre, gramos, precioKilo, fresco); |
 | 12 |      |    |                     |         |
 | 13 |      |    |                     |         |
 | 14 |      |    |                     |         |
