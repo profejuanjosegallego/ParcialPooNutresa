@@ -5,7 +5,7 @@ public class Proteina extends Ingrediente {
 
     public Proteina(String codigo, String nombre, int gramos, double precioKilo,
                     boolean fresco, String tipo) {
-        super(codigo, nombre, gramos, precioKilo);
+        super(codigo, nombre, gramos, precioKilo,fresco);
         this.tipo = tipo;
     }
 
@@ -15,7 +15,7 @@ public class Proteina extends Ingrediente {
     @Override
     public int minutosCoccion() {
         if (tipo.equalsIgnoreCase("gallina")) {
-            return "60";
+            return 60;
         }
         return 90;
     }
