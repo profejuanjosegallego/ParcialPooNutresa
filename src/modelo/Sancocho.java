@@ -1,7 +1,7 @@
 package modelo;
 
 public class Sancocho implements Identificable, Costeable {
-    public static final double COSTO_GAS_POR_MINUTO = 100;
+    public static final double COSTO_GAS_POR_MINUTO = 100.0;
     public static final double MARGEN_GANANCIA = 0.60;
 
     private final String codigo;
@@ -31,7 +31,7 @@ public class Sancocho implements Identificable, Costeable {
     /** Costo de preparar la olla completa: ingredientes + gas (100 pesos por minuto de cocción). */
     @Override
     public double calcularCosto() {
-        return olla.calcularCostoIngredientes() + Olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO;
+        return olla.calcularCostoIngredientes() + olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO;
     }
 
     /** Precio de venta de UN plato: el costo de una porción más el 60 % de ganancia. */
@@ -48,16 +48,17 @@ public class Sancocho implements Identificable, Costeable {
 
     /** Es trifásico si lleva 3 o más proteínas (por ejemplo gallina, res y cerdo). */
     public boolean esTrifasico() {
-        return olla.getCantidadIngredientes() >= 3;
+      return olla.contarPorCategoria("Proteína") >= 3;
     }
 
     /** Descuenta los platos si alcanzan las porciones. Si no alcanzan, no descuenta nada. */
-    public void servir(int cantidad) {
+    public boolean servir(int cantidad) {
         if (cantidad <= 0 || cantidad > porcionesDisponibles) {
             return false;
         }
         porcionesDisponibles -= cantidad;
-        return true;
+        return  true;
+        
     }
 
     @Override
