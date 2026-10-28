@@ -33,22 +33,24 @@ public class Olla {
                     + ": el código " + nuevo.getCodigo() + " ya está en la olla.");
             return false;
         }
-        if (calcularPesoTotal() > capacidadGramos) {
-            System.out.println("No se agregó " + nuevo.getNombre() + ": no cabe en la olla.");
-            return false;
-        }
-        ingredientes.add(nuevo);
-        return true;
+        if ((calcularPesoTotal() + nuevo.getGramos()) > capacidadGramos) {
+        System.out.println("No se agregó " + nuevo.getNombre() + ": no cabe en la olla.");
+        return false;
     }
+    ingredientes.add(nuevo);
+    return true;
+    }
+    
 
     /** Retorna el ingrediente con ese código o null si no está en la olla. */
     public Ingrediente buscarPorCodigo(String codigo) {
         for (Ingrediente i : ingredientes) {
-            if (i.getNombre().equals(codigo)) {
-                return i;
-            }
+            if (i.getCodigo().equals(codigo)) {
+            return i;
         }
     }
+    return null;
+}
 
     public int calcularPesoTotal() {
         int total = 0;
@@ -61,21 +63,22 @@ public class Olla {
     /** Suma el costo de TODOS los ingredientes de la olla. */
     public double calcularCostoIngredientes() {
         double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
-            total += ingredientes.get(i).calcularCosto();
-        }
-        return total;
+       for (Ingrediente i : ingredientes) {
+        total += i.calcularCosto();
     }
+    return total;
+}
 
     /** La olla está lista cuando termina el ingrediente MÁS demorado (el mayor tiempo). */
     public int calcularTiempoCoccion() {
         int mayor = 0;
-        for (Ingrediente i : ingredientes) {
-            if (i.minutosCoccion() < mayor) {
-                mayor = i.minutosCoccion();
-            }
+       for (Ingrediente i : ingredientes) {
+        
+        if (i.minutosCoccion() > mayor) {
+            mayor = i.minutosCoccion();
         }
-        return mayor;
+    }
+    return mayor;
     }
 
     public int contarPorCategoria(String categoria) {
