@@ -1,19 +1,24 @@
 package modelo;
 
-/** Lo que va en el plato aparte: arroz, aguacate, ají... */
 public class Acompanamiento implements Costeable {
-    private final String nombre;
-    private final double precio;
+    private String nombre;
+    private double precio;
 
     public Acompanamiento(String nombre, double precio) {
         this.nombre = nombre;
         this.precio = precio;
     }
 
-    public String getNombre() { return nombre; }
-    public double getPrecio() { return precio }
+    @Override
+    public double calcularCosto() {
+        return precio;
+    }
 
-    public double calcularPrecio() {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public double getPrecio() {
         return precio;
     }
 }

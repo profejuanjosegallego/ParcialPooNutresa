@@ -3,43 +3,40 @@ package modelo;
 import java.util.ArrayList;
 
 public class Pedido implements Costeable {
-    private final int mesa;
-    private final Sancocho sancocho;
-    private final int cantidad;
-    private final ArrayList<Acompanamiento> acompanamientos;
+    private int mesa;
+    private Sancocho sancocho;
+    private int cantidad;
+    private ArrayList<Acompanamiento> acompanamientos;
 
-    public Pedido(int mesa, Sancocho sancocho, int cantidad) {
+    public Pedido(int mesa, Sancocho sancocho, int cantidad, ArrayList<Acompanamiento> acompanamientos) {
         this.mesa = mesa;
         this.sancocho = sancocho;
         this.cantidad = cantidad;
-        this.acompanamientos = new ArrayList<>();
+        this.acompanamientos = acompanamientos != null ? acompanamientos : new ArrayList<>();
     }
 
-    public int getMesa() { return mesa; }
-    public Sancocho getSancocho() { return sancocho; }
-    public int getCantidad() { return cantidad; }
-
-    public void agregarAcompanamiento(Acompanamiento acompanamiento) {
-        if (acompanamiento != null) {
-            acompanamientos.add(acompanamiento);
-        }
-    }
-
-    /** CADA plato lleva sus acompañamientos: (precio del plato + acompañamientos) × cantidad. */
     @Override
     public double calcularCosto() {
-        double sumaAcompanamientos = 0;
+        double costoAcomps = 0.0;
         for (Acompanamiento a : acompanamientos) {
-            sumaAcompanamientos += a.getPrecio;
+            costoAcomps += a.calcularCosto();
         }
-        return sancocho.calcularPrecioPorcion() * cantidad + sumaAcompanamientos;
+        return (sancocho.calcularPrecioPorcion() + costoAcomps) * cantidad;
     }
 
-    public String obtenerResumen() {
-        String texto = "Mesa " + mesa + ": " + cantidad + " x " + sancocho.getNombre();
-        for (Acompanamiento a : acompanamientos) {
-            texto += " + " + a.getNombre();
-        }
-        return texto + " = $" + String.format("%.0f", calcularCosto());
+    public int getMesa() {
+        return mesa;
+    }
+
+    public Sancocho getSancocho() {
+        return sancocho;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public ArrayList<Acompanamiento> getAcompanamientos() {
+        return acompanamientos;
     }
 }

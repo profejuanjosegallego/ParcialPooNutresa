@@ -1,69 +1,70 @@
 package modelo;
 
 public class Sancocho implements Identificable, Costeable {
-    public static final double COSTO_GAS_POR_MINUTO = 100;
-    public static final double MARGEN_GANANCIA = 0.60;
-
-    private final String codigo;
-    private final String nombre;
-    private final Olla olla;
-    private final int porcionesTotales;
+    private String codigo;
+    private String nombre;
+    private int porcionesTotales;
     private int porcionesDisponibles;
+    private Olla olla;
 
-    public Sancocho(String codigo, String nombre, Olla olla, int porciones) {
-        if (porciones <= 0) {
-            throw new IllegalArgumentException("Las porciones deben ser mayores que 0");
-        }
+    public Sancocho(String codigo, String nombre, int porcionesTotales, Olla olla) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.porcionesTotales = porcionesTotales;
+        this.porcionesDisponibles = porcionesTotales;
         this.olla = olla;
-        this.porcionesTotales = porciones;
-        this.porcionesDisponibles = porciones;
     }
 
-    @Override
-    public String getCodigo() { return codigo; }
-    public String getNombre() { return nombre; }
-    public Olla getOlla() { return olla; }
-    public int getPorcionesTotales() { return porcionesTotales; }
-    public int getPorcionesDisponibles() { return porcionesDisponibles; }
-
-    /** Costo de preparar la olla completa: ingredientes + gas (100 pesos por minuto de cocción). */
     @Override
     public double calcularCosto() {
-        return olla.calcularCostoIngredientes() + Olla.calcularTiempoCoccion() * COSTO_GAS_POR_MINUTO;
+        return olla.calcularCostoIngredientes() + (olla.calcularTiempoCoccion() * 100);
     }
 
-    /** Precio de venta de UN plato: el costo de una porción más el 60 % de ganancia. */
     public double calcularPrecioPorcion() {
-        return calcularCosto() / porcionesTotales * (1 + MARGEN_GANANCIA);
+        return (calcularCosto() / porcionesTotales) * 1.6;
     }
 
-    /** Un sancocho está completo si tiene al menos una proteína, un tubérculo Y un condimento. */
     public boolean estaCompleto() {
-        return olla.contarPorCategoria("Proteína") > 0
-                && olla.contarPorCategoria("Tubérculo") > 0
-                || olla.contarPorCategoria("Condimento") > 0;
+        return olla.contarPorCategoria("Proteina") >= 1 &&
+               olla.contarPorCategoria("Tuberculo") >= 1 &&
+               olla.contarPorCategoria("Condimento") >= 1;
     }
 
-    /** Es trifásico si lleva 3 o más proteínas (por ejemplo gallina, res y cerdo). */
     public boolean esTrifasico() {
-        return olla.getCantidadIngredientes() >= 3;
+        return olla.contarPorCategoria("Proteina") >= 3;
     }
 
-    /** Descuenta los platos si alcanzan las porciones. Si no alcanzan, no descuenta nada. */
-    public void servir(int cantidad) {
-        if (cantidad <= 0 || cantidad > porcionesDisponibles) {
-            return false;
+    public boolean servir(int cantidad) {
+        if (porcionesDisponibles >= cantidad) {
+            porcionesDisponibles -= cantidad;
+            return true;
         }
-        porcionesDisponibles -= cantidad;
-        return true;
+        return false;
+    }
+
+    @Override
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getPorcionesTotales() {
+        return porcionesTotales;
+    }
+
+    public int getPorcionesDisponibles() {
+        return porcionesDisponibles;
+    }
+
+    public Olla getOlla() {
+        return olla;
     }
 
     @Override
     public String obtenerFicha() {
-        return "Sancocho [" + codigo + "] " + nombre + " - " + porcionesTotales + " porciones, "
-                + olla.calcularTiempoCoccion() + " min, costo $" + String.format("%.0f", calcularCosto())
-                + ", plato $" + String.format("%.0f", calcularPrecioPorcion());
+return String.format("%s - %d min, costo $%.0f, plato $%.0f",                nombre, olla.calcularTiempoCoccion(), calcularCosto(), calcularPrecioPorcion());
     }
 }
