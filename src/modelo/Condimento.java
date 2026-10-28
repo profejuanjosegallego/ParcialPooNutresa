@@ -6,15 +6,15 @@ public class Condimento extends Ingrediente {
     public Condimento(String codigo, String nombre, int gramos, double precioKilo,
                       boolean fresco, boolean seAgregaAlFinal) {
         super(codigo, nombre, gramos, precioKilo, fresco);
-        this.seAgregaAlFinal = alFinal;
+        this.seAgregaAlFinal = seAgregaAlFinal;
     }
 
     public boolean isSeAgregaAlFinal() { return seAgregaAlFinal; }
 
     /** Las hierbas que se echan al final (cilantro, guascas) necesitan 5 minutos; las demás, 20. */
     @Override
-    public int minutosCoccion() {
-        int minutos;
+    public int  minutosCoccion() {
+        int minutos =0;
         if (seAgregaAlFinal) {
             minutos = 5;
         } else if (!seAgregaAlFinal) {
