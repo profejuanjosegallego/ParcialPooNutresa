@@ -3,7 +3,7 @@
 ## 1. Errores de sintaxis corregidos
 | # | Archivo | Línea | Mensaje del compilador | Corrección |
 |---|---------|-------|------------------------|------------|
-| 1 | ...     | ...   | ...                    | ...        |
+| 1 |  ..     |  25   | ...                    | ...        |
 (las 25 filas)
 
 ## 2. Errores de lógica corregidos
