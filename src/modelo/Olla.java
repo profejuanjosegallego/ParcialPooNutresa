@@ -21,22 +21,10 @@ public class Olla {
 
     /** Agrega el ingrediente solo si está fresco, su código no está repetido y CABE en la olla. */
     public boolean agregarIngrediente(Ingrediente nuevo) {
-        if (nuevo == null) {
-            return false;
-        }
-        if (!nuevo.isFresco()) {
-            System.out.println("No se agregó " + nuevo.getNombre() + ": no está fresco.");
-            return false;
-        }
-        if (buscarPorCodigo(nuevo.getCodigo()) != null) {
-            System.out.println("No se agregó " + nuevo.getNombre()
-                    + ": el código " + nuevo.getCodigo() + " ya está en la olla.");
-            return false;
-        }
-        if (calcularPesoTotal() > capacidadGramos) {
-            System.out.println("No se agregó " + nuevo.getNombre() + ": no cabe en la olla.");
-            return false;
-        }
+        if (nuevo == null || !nuevo.isFresco()) return false;
+        if (buscarPorCodigo(nuevo.getCodigo()) != null) return false;
+        if (calcularPesoTotal() + nuevo.getGramos() > capacidadGramos) return false;
+    
         ingredientes.add(nuevo);
         return true;
     }
@@ -44,10 +32,11 @@ public class Olla {
     /** Retorna el ingrediente con ese código o null si no está en la olla. */
     public Ingrediente buscarPorCodigo(String codigo) {
         for (Ingrediente i : ingredientes) {
-            if (i.getNombre().equals(codigo)) {
+            if (i.getCodigo().equalsIgnoreCase(codigo)) {
                 return i;
             }
         }
+        return null;
     }
 
     public int calcularPesoTotal() {
@@ -61,8 +50,8 @@ public class Olla {
     /** Suma el costo de TODOS los ingredientes de la olla. */
     public double calcularCostoIngredientes() {
         double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
-            total += ingredientes.get(i).calcularCosto();
+        for (Ingrediente i : ingredientes) {
+            total += i.calcularCosto();
         }
         return total;
     }
@@ -71,7 +60,7 @@ public class Olla {
     public int calcularTiempoCoccion() {
         int mayor = 0;
         for (Ingrediente i : ingredientes) {
-            if (i.minutosCoccion() < mayor) {
+            if (i.minutosCoccion() > mayor) {
                 mayor = i.minutosCoccion();
             }
         }
