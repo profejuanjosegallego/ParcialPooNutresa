@@ -20,7 +20,7 @@ public class Main {
         Proteina gallina = new Proteina("PRO-001", "Gallina criolla", 1500, 18000, true, "gallina");
         //                              código     nombre          gramos  $/kg  fresco  duro
         Tuberculo papa = new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false);
-        Tuberculo yuca = new Ingrediente("TUB-002", "Yuca", 800, 3500, true, true);
+        Tuberculo yuca = new Tuberculo("TUB-002", "Yuca", 800, 3500, true, true);
         //                            código     nombre           gramos  $/kg  fresco
         Verdura mazorca = new Verdura("VER-001", "Mazorca", 600, 4000, true);
         Verdura platano = new Verdura("VER-002", "Plátano verde", 500, 4000, true);
@@ -105,8 +105,18 @@ public class Main {
         System.out.printf("Ventas del día: $%.0f%n", fonda.calcularVentasDelDia());
 
         System.out.println("\n=== 6. Polimorfismo ===");
-        Proteina buscada = ollaGallina.buscarPorCodigo("PRO-001");
-        System.out.println("Buscar PRO-001: " + (buscada != null ? buscada.getNombre() + " (" + buscada.getTipo() + ")" : "no encontrado"));
+        Ingrediente buscada = ollaGallina.buscarPorCodigo("PRO-001");
+
+        if (buscada instanceof Proteina) {
+        Proteina proteina = (Proteina) buscada;
+
+        System.out.println("Buscar PRO-001: "
+                + proteina.getNombre()
+                + " (" + proteina.getTipo() + ")");
+        } else {
+        System.out.println("Proteína no encontrada");
+        }
+        
         Identificable conCodigo = trifasico;
         System.out.println("Como Identificable: " + conCodigo.getCodigo());
         ArrayList<Costeable> cosasConPrecio = new ArrayList<>();

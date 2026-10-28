@@ -7,8 +7,14 @@ public class Olla {
     private final ArrayList<Ingrediente> ingredientes;
 
     public Olla(int capacidadGramos) {
-        this.capacidadGramos = capacidadGramos;
-        this.ingredientes = new ArrayList<>();
+        if (capacidadGramos <= 0) {
+        throw new IllegalArgumentException(
+            "La capacidad debe ser mayor que cero"
+        );
+    }
+
+    this.capacidadGramos = capacidadGramos;
+    this.ingredientes = new ArrayList<>();
     }
 
     public int getCapacidadGramos() { return capacidadGramos; }
@@ -33,10 +39,11 @@ public class Olla {
                     + ": el código " + nuevo.getCodigo() + " ya está en la olla.");
             return false;
         }
-        if (calcularPesoTotal() > capacidadGramos) {
+       if (calcularPesoTotal() + nuevo.getGramos() > capacidadGramos) {
             System.out.println("No se agregó " + nuevo.getNombre() + ": no cabe en la olla.");
             return false;
         }
+        
         ingredientes.add(nuevo);
         return true;
     }
@@ -44,10 +51,10 @@ public class Olla {
     /** Retorna el ingrediente con ese código o null si no está en la olla. */
     public Ingrediente buscarPorCodigo(String codigo) {
         for (Ingrediente i : ingredientes) {
-            if (i.getNombre().equals(codigo)) {
+            if (i.getCodigo().equals(codigo))
                 return i;
             }
-        }
+        return null;
     }
 
     public int calcularPesoTotal() {
@@ -61,9 +68,9 @@ public class Olla {
     /** Suma el costo de TODOS los ingredientes de la olla. */
     public double calcularCostoIngredientes() {
         double total = 0;
-        for (int i = 1; i < ingredientes.length; i++) {
-            total += ingredientes.get(i).calcularCosto();
-        }
+        for (Ingrediente i : ingredientes) {
+        total += i.calcularCosto();
+    }
         return total;
     }
 
@@ -71,7 +78,7 @@ public class Olla {
     public int calcularTiempoCoccion() {
         int mayor = 0;
         for (Ingrediente i : ingredientes) {
-            if (i.minutosCoccion() < mayor) {
+            if (i.minutosCoccion() > mayor) {
                 mayor = i.minutosCoccion();
             }
         }
