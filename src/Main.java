@@ -20,7 +20,7 @@ public class Main {
         Proteina gallina = new Proteina("PRO-001", "Gallina criolla", 1500, 18000, true, "gallina");
         //                          código   nombre            gramos $/kg  fresco duro
         Tuberculo papa = new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false);
-        Tuberculo yuca = new Tuberculo("TUB-002", "Yuca", 1500, 2500, true, true);
+        Tuberculo yuca = new Tuberculo("TUB-002", "Yuca", 800, 3500, true, true);
         //                         código   nombre      gramos $/kg  fresco
         Verdura mazorca = new Verdura("VER-001", "Mazorca", 600, 4000, true);
         Verdura platano = new Verdura("VER-002", "Plátano verde", 500, 4000, true);
@@ -48,7 +48,7 @@ public class Main {
         ollaTrifasica.agregarIngrediente(new Proteina("PRO-002", "Costilla de res", 1000, 26000, true, "res"));
         ollaTrifasica.agregarIngrediente(new Proteina("PRO-003", "Cerdo", 800, 22000, true, "cerdo"));
         ollaTrifasica.agregarIngrediente(new Tuberculo("TUB-001", "Papa pastusa", 1000, 3000, true, false));
-        ollaTrifasica.agregarIngrediente(new Tuberculo("TUB-002", "Yuca", 1000, 2500, true, true));
+        ollaTrifasica.agregarIngrediente(new Tuberculo("TUB-002", "Yuca", 500, 2500, true, true));
         ollaTrifasica.agregarIngrediente(new Verdura("VER-001", "Mazorca", 600, 4000, true));
         ollaTrifasica.agregarIngrediente(new Condimento("CON-001", "Cilantro", 50, 20000, true, true));
         ollaTrifasica.mostrarIngredientes();
@@ -62,7 +62,7 @@ public class Main {
         ollaPequena.mostrarIngredientes();
 
         System.out.println("\n=== 4. Sancochos ===");
-        Sancocho deGallina = new Sancocho("SAN-001", "Sancocho de gallina", ollaGallina, 5);
+        Sancocho deGallina = new Sancocho("SAN-001", "Sancocho de gallina", ollaGallina, 8);
         Sancocho trifasico = new Sancocho("SAN-002", "Sancocho trifásico", ollaTrifasica, 10);
         Sancocho caldo = new Sancocho("SAN-003", "Caldo de papa", ollaPequena, 2);
 
@@ -105,7 +105,7 @@ public class Main {
         Pedido mesa4 = fonda.registrarPedido(4, "SAN-999", 1);
         System.out.println("¿Se registró el pedido de la mesa 4? " + (mesa4 != null));
 
-        Pedido mesa5 = fonda.registrarPedido(5, "SAN-001", 3);
+        Pedido mesa5 = fonda.registrarPedido(5, "SAN-001", 6);
         if (mesa5 != null) {
             System.out.println(mesa5.obtenerResumen());
         }

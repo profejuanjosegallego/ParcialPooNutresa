@@ -14,7 +14,7 @@ public class Tuberculo extends Ingrediente {
     /** Los tubérculos duros (yuca, ñame) necesitan 40 minutos; los blandos (papa), 25. */
     @Override
     public int minutosCoccion() {
-        return duro ? 25 : 40;
+        return duro ? 40 : 25;
     }
 
     @Override
