@@ -25,9 +25,4 @@ public class Proteina extends Ingrediente {
         return "Proteína";
     }
 
-    @Override
-    public int minutosDeCoccion() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'minutosDeCoccion'");
-    }
 }

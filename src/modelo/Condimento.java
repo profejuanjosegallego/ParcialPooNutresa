@@ -14,13 +14,10 @@ public class Condimento extends Ingrediente {
     /** Las hierbas que se echan al final (cilantro, guascas) necesitan 5 minutos; las demás, 20. */
     @Override
     public int minutosCoccion() {
-        int minutos = 0;
         if (seAgregaAlFinal) {
-            minutos = 5;
-        } else if (!seAgregaAlFinal) {
-            minutos = 20;
+            return 5;
         }
-        return minutos;
+        return 20;
     }
 
     @Override
@@ -28,9 +25,4 @@ public class Condimento extends Ingrediente {
         return "Condimento";
     }
 
-    @Override
-    public int minutosDeCoccion() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'minutosDeCoccion'");
-    }
 }

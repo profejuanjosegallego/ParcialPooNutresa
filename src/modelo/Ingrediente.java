@@ -53,7 +53,7 @@ public abstract class Ingrediente implements Identificable, Costeable {
     /** Costo en pesos: los gramos se pasan a kilos y se multiplican por el precio del kilo. */
     @Override
     public double calcularCosto() {
-        return gramos / 1000 * precioKilo;
+        return gramos / 1000.0 * precioKilo;
     }
 
     /** Minutos que el ingrediente necesita dentro de la olla. */
@@ -62,12 +62,9 @@ public abstract class Ingrediente implements Identificable, Costeable {
     /** "Proteína", "Tubérculo", "Verdura" o "Condimento". */
     public abstract String getCategoria();
 
-@Override
+    @Override
     public String obtenerFicha() {
-    return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $ " +
-           String.format("%.0f", calcularCosto()) + ", " + minutosCoccion() + " min";
+        return getCategoria() + " [" + codigo + "] " + nombre + " - " + gramos + " g, $ " +
+               String.format("%.0f", calcularCosto()) + ", " + minutosCoccion() + " min";
     }
 }
-
-
-    

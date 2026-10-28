@@ -8,18 +8,12 @@ public class Verdura extends Ingrediente {
 
     /** La mazorca, el plátano y la cebolla se cocinan 30 minutos. */
     @Override
-    public int minutosDeCoccion() {
+    public int minutosCoccion() {
         return 30;
     }
 
     @Override
     public String getCategoria() {
         return "Verdura";
-    }
-
-    @Override
-    public int minutosCoccion() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'minutosCoccion'");
     }
 }
