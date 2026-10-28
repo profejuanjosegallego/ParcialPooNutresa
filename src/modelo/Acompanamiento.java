@@ -17,4 +17,10 @@ public class Acompanamiento implements Costeable {
     public double calcularPrecio() {
         return precio;
     }
+
+    @Override
+    public double calcularCosto() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'calcularCosto'");
+    }
 }
