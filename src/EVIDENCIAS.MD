@@ -44,8 +44,8 @@
   found:    int,Sancocho
   reason: actual and formal argument lists differ in length | Pedido pedido = new Pedido(mesa, sancocho, cantidad); |
 | 23 | Fonda.java | 66 | package system does not exist | System.out.println("Menú de " + nombre + ":"); |
-| 24 |  |  |  |  |
-| 25 |  |  |  |  |
+| 24 | Main.java | 108 | incompatible types: Ingrediente cannot be converted to Proteina | Proteina buscada = (Proteina) ollaGallina.buscarPorCodigo("PRO-001"); |
+| 25 | Main.java | 23 | Ingrediente is abstract; cannot be instantiated | Tuberculo yuca = new Tuberculo("TUB-002", "Yuca", 800, 3500, true, true); |
 (las 25 filas)
 
 ## 2. Errores de lógica corregidos
@@ -64,6 +64,7 @@
 
 ## 3. Salida final del programa
 (pega aquí la salida completa de `java cp out Main`, o una captura)
+
 
 ## 4. Conceptos de POO en este proyecto
 Explica brevemente (23 líneas cada uno) DÓNDE se usa en este código:
